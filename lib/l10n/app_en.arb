@@ -1,0 +1,11 @@
+{
+    "@@locale" : "en",
+    "appName" : "Demo app",
+
+
+    "helloWorld": "Hello World!",
+    "@helloWorld": {},
+
+    "today": "Today",
+    "@today": {}
+}
