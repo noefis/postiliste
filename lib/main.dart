@@ -3,6 +3,7 @@ import 'package:postiliste/dark_theme_styles.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'custom_radio.dart';
 import 'dark_theme_provider.dart';
 
 void main() {
@@ -61,26 +62,33 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List values = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-        ),
-        body: Center(
-            child: Padding(
-          padding: const EdgeInsets.only(top: 42),
-          child: Column(
-            children: <Widget>[
-              Text(
-                AppLocalizations.of(context)!.today,
-                style: Theme.of(context).textTheme.headline4,
-              ),
-              ElevatedButton(onPressed: (() => {}), child: Text("bla"))
-            ],
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.only(top: 48, left: 15, right: 15),
+        children: [
+          Text(
+            AppLocalizations.of(context)!.today,
+            style: Theme.of(context).textTheme.headline4,
           ),
-        )));
+          Column(
+            children: [
+              MyRadioListTile(title: widget.title),
+              MyRadioListTile(
+                  title:
+                      "Erinnerungen - Gestern, 22:00, Wöchentlich am Sonntag, Montag"),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }

@@ -12,6 +12,7 @@ class Styles {
       hoverColor: const Color(0xff4285F4),
       focusColor: const Color(0xffA8DAB5),
       disabledColor: Colors.grey,
+      unselectedWidgetColor: Colors.black,
       cardColor: Colors.white,
       canvasColor: Colors.grey[50],
       brightness: Brightness.light,
@@ -22,13 +23,13 @@ class Styles {
         elevation: 0.0,
       ),
       textSelectionTheme:
-          const TextSelectionThemeData(selectionColor: Colors.black),
+          const TextSelectionThemeData(selectionColor: Colors.black54),
     );
   }
 
   static ThemeData themeDataDark(BuildContext context) {
     return ThemeData(
-      primarySwatch: Colors.indigo,
+      primarySwatch: Colors.blue,
       primaryColor: Colors.black,
       backgroundColor: Colors.black,
       indicatorColor: const Color(0xff0E1D36),
@@ -37,9 +38,11 @@ class Styles {
       hoverColor: const Color(0xff3A3A3B),
       focusColor: const Color(0xff0B2512),
       disabledColor: Colors.grey,
+      unselectedWidgetColor: Colors.white,
       cardColor: const Color(0xFF151515),
       canvasColor: Colors.black,
       brightness: Brightness.dark,
+      toggleableActiveColor: Colors.red,
       buttonTheme: Theme.of(context)
           .buttonTheme
           .copyWith(colorScheme: const ColorScheme.dark()),
@@ -47,7 +50,7 @@ class Styles {
         elevation: 0.0,
       ),
       textSelectionTheme:
-          const TextSelectionThemeData(selectionColor: Colors.white),
+          const TextSelectionThemeData(selectionColor: Colors.white70),
     );
   }
 }
