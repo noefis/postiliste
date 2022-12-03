@@ -63,8 +63,9 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
             color: _value ? Theme.of(context).colorScheme.primary : null,
             borderRadius: BorderRadius.circular(400),
             border: Border.all(
-              color:
-                  _value ? Theme.of(context).primaryColor : Colors.grey[500]!,
+              color: _value
+                  ? Theme.of(context).primaryColor
+                  : Theme.of(context).shadowColor,
               width: _value ? 3 : 1.5,
             ),
           ),
