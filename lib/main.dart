@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:postiliste/custom_radio_input.dart';
 import 'package:postiliste/dark_theme_styles.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -79,12 +80,15 @@ class _MyHomePageState extends State<MyHomePage> {
             AppLocalizations.of(context)!.today,
             style: Theme.of(context).textTheme.headline4,
           ),
+          const Padding(padding: EdgeInsets.all(6)),
           Column(
             children: [
               MyRadioListTile(title: widget.title),
-              MyRadioListTile(
+              const MyRadioListTile(
                   title:
                       "Erinnerungen - Gestern, 22:00, Wöchentlich am Sonntag, Montag"),
+              const MyRadioListTileInput(),
+              Divider(color: Theme.of(context).disabledColor),
             ],
           )
         ],
