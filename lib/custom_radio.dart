@@ -22,8 +22,8 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
           PageRouteBuilder(
             pageBuilder: (_, __, ___) =>
                 SingleItemViewRoute(title: widget.title!),
-            transitionDuration: const Duration(milliseconds: 420),
-            reverseTransitionDuration: const Duration(milliseconds: 360),
+            transitionDuration: const Duration(milliseconds: 320),
+            reverseTransitionDuration: const Duration(milliseconds: 300),
             transitionsBuilder: (context, animation, _, child) {
               const begin = Offset(1, 0.0);
               const end = Offset.zero;

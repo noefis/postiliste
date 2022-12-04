@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:postiliste/single_item/custom_radio_input_item.dart';
 import 'package:postiliste/single_item/custom_radio_item.dart';
 
 class SingleItemViewRoute extends StatefulWidget {
@@ -26,12 +27,13 @@ class _SingleItemView extends State<SingleItemViewRoute> {
 
   Widget singleItemView(BuildContext context) {
     return ListView(
-        padding: const EdgeInsets.only(top: 72, left: 20, right: 15),
+        padding: const EdgeInsets.only(top: 60, left: 20, right: 15),
         children: [
           Hero(
               tag: widget.title,
               child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
                       border: Border(
                           bottom:
@@ -41,7 +43,13 @@ class _SingleItemView extends State<SingleItemViewRoute> {
                           .textTheme
                           .headline6
                           ?.copyWith(color: Theme.of(context).disabledColor)))),
-          const SingleItemRadio(title: "title")
+          const SingleItemRadio(title: "title"),
+          const SingleItemRadio(title: "title"),
+          const SingleItemRadio(title: "title"),
+          const SingleItemRadio(title: "title"),
+          const SingleItemRadio(title: "title"),
+          const SingleItemRadio(title: "title"),
+          const SingleItemRadioInput()
         ]);
   }
 }

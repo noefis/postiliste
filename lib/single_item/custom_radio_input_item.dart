@@ -19,7 +19,6 @@ class _SingleItemRadioInput<T> extends State<SingleItemRadioInput> {
     return InkWell(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        margin: const EdgeInsets.symmetric(vertical: 3),
         child: Row(
           children: [
             _customRadioButton,

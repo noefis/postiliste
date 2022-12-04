@@ -28,25 +28,19 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
             _customRadioButton,
             const SizedBox(width: 12),
             Expanded(
-                child: Hero(
-                    tag: widget.title!,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      decoration: BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(
-                                  color: Theme.of(context).hoverColor))),
-                      child: Text(widget.title!,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
-                                  color: _value
-                                      ? Theme.of(context).disabledColor
-                                      : Theme.of(context)
-                                          .textSelectionTheme
-                                          .selectionColor)),
-                    )))
+                child: Container(
+              padding: const EdgeInsets.only(bottom: 13, top: 7),
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: Theme.of(context).hoverColor))),
+              child: Text(widget.title!,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: _value
+                          ? Theme.of(context).disabledColor
+                          : Theme.of(context)
+                              .textSelectionTheme
+                              .selectionColor)),
+            ))
           ],
         ),
       ),
