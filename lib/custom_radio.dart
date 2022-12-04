@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:postiliste/single_item_view.dart';
+import 'package:postiliste/single_item/single_item_view.dart';
 
 class MyRadioListTile extends StatefulWidget {
   final String? title;
@@ -23,11 +23,11 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
             pageBuilder: (_, __, ___) =>
                 SingleItemViewRoute(title: widget.title!),
             transitionDuration: const Duration(milliseconds: 420),
-            reverseTransitionDuration: const Duration(milliseconds: 12),
+            reverseTransitionDuration: const Duration(milliseconds: 360),
             transitionsBuilder: (context, animation, _, child) {
-              const begin = Offset(-0.1, 0.0);
+              const begin = Offset(1, 0.0);
               const end = Offset.zero;
-              const curve = Curves.ease;
+              const curve = Curves.easeInOutSine;
 
               var tween =
                   Tween(begin: begin, end: end).chain(CurveTween(curve: curve));

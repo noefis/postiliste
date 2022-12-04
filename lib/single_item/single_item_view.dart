@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:postiliste/single_item/custom_radio_item.dart';
 
 class SingleItemViewRoute extends StatefulWidget {
   final String title;
@@ -40,6 +41,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
                           .textTheme
                           .headline6
                           ?.copyWith(color: Theme.of(context).disabledColor)))),
+          const SingleItemRadio(title: "title")
         ]);
   }
 }
