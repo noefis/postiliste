@@ -76,7 +76,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     return Text(DateFormat('EE, d. MMM.').format(date),
         style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: Theme.of(context).disabledColor,
+              color: Theme.of(context).secondaryHeaderColor,
+            ));
+  }
+
+  Text lastDate(DateTime date) {
+    return Text(DateFormat('EE, d. MMM.').format(date),
+        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: Theme.of(context).shadowColor,
             ));
   }
 
@@ -108,6 +115,10 @@ class _MyHomePageState extends State<MyHomePage> {
           DateItem(
               title: date(DateTime(now.year, now.month, now.day + 2)),
               radios: const ["Coop...", "bla"]),
+          DateItem(
+              title: lastDate(DateTime(now.year, now.month, now.day + 3)),
+              radios: const [],
+              divider: false),
         ],
       ),
     );

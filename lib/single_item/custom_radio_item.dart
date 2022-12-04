@@ -37,9 +37,7 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: _value
                           ? Theme.of(context).disabledColor
-                          : Theme.of(context)
-                              .textSelectionTheme
-                              .selectionColor)),
+                          : Theme.of(context).unselectedWidgetColor)),
             ))
           ],
         ),

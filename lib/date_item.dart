@@ -6,8 +6,13 @@ import 'custom_radio_input.dart';
 class DateItem extends StatefulWidget {
   final Text title;
   final List<String> radios;
+  final bool divider;
 
-  const DateItem({super.key, required this.title, required this.radios});
+  const DateItem(
+      {super.key,
+      required this.title,
+      required this.radios,
+      this.divider = true});
 
   @override
   State<DateItem> createState() => _DateItem();
@@ -24,7 +29,10 @@ class _DateItem<T> extends State<DateItem> {
           children: [
             for (String item in widget.radios) MyRadioListTile(title: item),
             const MyRadioListTileInput(),
-            Divider(color: Theme.of(context).disabledColor),
+            Divider(
+                color: widget.divider
+                    ? Theme.of(context).disabledColor
+                    : Theme.of(context).primaryColor),
           ],
         )
       ],

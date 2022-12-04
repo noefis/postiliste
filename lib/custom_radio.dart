@@ -64,8 +64,7 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
                                   color: _value
                                       ? Theme.of(context).disabledColor
                                       : Theme.of(context)
-                                          .textSelectionTheme
-                                          .selectionColor)),
+                                          .unselectedWidgetColor)),
                     )))
           ],
         ),
