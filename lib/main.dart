@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:postiliste/custom_radio_input.dart';
 import 'package:postiliste/dark_theme_styles.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:postiliste/date_item.dart';
 
-import 'custom_radio.dart';
 import 'dark_theme_provider.dart';
 
 void main() {
@@ -110,9 +108,6 @@ class _MyHomePageState extends State<MyHomePage> {
           DateItem(
               title: date(DateTime(now.year, now.month, now.day + 2)),
               radios: const ["Coop...", "bla"]),
-          DateItem(
-              title: date(DateTime(now.year, now.month, now.day + 3)),
-              radios: const ["Migros...", "bla"]),
         ],
       ),
     );

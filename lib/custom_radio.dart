@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:postiliste/single_item_view.dart';
 
 class MyRadioListTile extends StatefulWidget {
   final String? title;
@@ -16,9 +17,28 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        setState(() {
-          _value = !_value;
-        });
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (_, __, ___) =>
+                SingleItemViewRoute(title: widget.title!),
+            transitionDuration: const Duration(milliseconds: 420),
+            reverseTransitionDuration: const Duration(milliseconds: 12),
+            transitionsBuilder: (context, animation, _, child) {
+              const begin = Offset(-0.1, 0.0);
+              const end = Offset.zero;
+              const curve = Curves.ease;
+
+              var tween =
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            },
+          ),
+        );
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -28,17 +48,25 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
             _customRadioButton,
             const SizedBox(width: 12),
             Expanded(
-                child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: Theme.of(context).hoverColor))),
-              child: Text(widget.title!,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: _value
-                          ? Theme.of(context).disabledColor
-                          : Theme.of(context).unselectedWidgetColor)),
-            ))
+                child: Hero(
+                    tag: widget.title!,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(
+                                  color: Theme.of(context).hoverColor))),
+                      child: Text(widget.title!,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                  color: _value
+                                      ? Theme.of(context).disabledColor
+                                      : Theme.of(context)
+                                          .textSelectionTheme
+                                          .selectionColor)),
+                    )))
           ],
         ),
       ),
@@ -46,29 +74,35 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
   }
 
   Widget get _customRadioButton {
-    return Container(
-        constraints: const BoxConstraints(
-            maxWidth: 25, maxHeight: 25, minHeight: 25, minWidth: 25),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(400),
-            border: Border.all(
-              color: _value
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).primaryColor,
-              width: 1.5,
-            )),
+    return GestureDetector(
+        onTap: () {
+          setState(() {
+            _value = !_value;
+          });
+        },
         child: Container(
-          padding: EdgeInsets.all(_value ? 8 : 9.5),
-          decoration: BoxDecoration(
-            color: _value ? Theme.of(context).colorScheme.primary : null,
-            borderRadius: BorderRadius.circular(400),
-            border: Border.all(
-              color: _value
-                  ? Theme.of(context).primaryColor
-                  : Theme.of(context).shadowColor,
-              width: _value ? 3 : 1.5,
-            ),
-          ),
-        ));
+            constraints: const BoxConstraints(
+                maxWidth: 25, maxHeight: 25, minHeight: 25, minWidth: 25),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(400),
+                border: Border.all(
+                  color: _value
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).primaryColor,
+                  width: 1.5,
+                )),
+            child: Container(
+              padding: EdgeInsets.all(_value ? 8 : 9.5),
+              decoration: BoxDecoration(
+                color: _value ? Theme.of(context).colorScheme.primary : null,
+                borderRadius: BorderRadius.circular(400),
+                border: Border.all(
+                  color: _value
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).shadowColor,
+                  width: _value ? 3 : 1.5,
+                ),
+              ),
+            )));
   }
 }
