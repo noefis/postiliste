@@ -108,7 +108,7 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
     }
     stops.add(1.0);
 
-    var dontQuestionIt = BoxDecoration(
+    var dottedLine = BoxDecoration(
       borderRadius: BorderRadius.circular(400),
       gradient: SweepGradient(
         stops: stops,
@@ -128,7 +128,7 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
             )),
         child: Container(
           padding: const EdgeInsets.all(1.75),
-          decoration: dontQuestionIt,
+          decoration: dottedLine,
           child: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
