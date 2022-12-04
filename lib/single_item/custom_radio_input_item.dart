@@ -30,6 +30,7 @@ class _SingleItemRadioInput<T> extends State<SingleItemRadioInput> {
                               focusNode, onFieldSubmitted) {
                             return TextField(
                               controller: textEditingController,
+                              scrollPadding: const EdgeInsets.only(bottom: 120),
                               focusNode: focusNode,
                               decoration: const InputDecoration(
                                   border: InputBorder.none),

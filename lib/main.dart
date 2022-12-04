@@ -4,6 +4,7 @@ import 'package:postiliste/dark_theme_styles.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:postiliste/date_item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dark_theme_provider.dart';
 
@@ -63,11 +64,59 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List values = [];
+  Map lists = <DateTime, List<String>>{};
   final now = DateTime.now();
+  DateTime lastDay = DateTime(
+      DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
+
+  Future<void> getLists() async {
+    final prefs = await SharedPreferences.getInstance();
+    Map tmpLists = <DateTime, List<String>>{};
+
+    List<String>? activeLists = prefs.getStringList("active");
+    debugPrint(activeLists.toString());
+
+    activeLists?.forEach((active) {
+      List actives = active.split(',');
+      if (tmpLists.containsKey(onlyDate(actives.last))) {
+        List<String> bla = tmpLists[onlyDate(actives.last)];
+        bla.add(actives.first);
+      } else {
+        List<String> values = [];
+        values.add(actives.first);
+        tmpLists[onlyDate(actives.last)] = values;
+      }
+    });
+
+    if (tmpLists.keys.last.millisecondsSinceEpoch >
+        lastDay.millisecondsSinceEpoch) {
+      lastDay = tmpLists.keys.last;
+    }
+    debugPrint(tmpLists.toString());
+
+    if (lists.toString() != tmpLists.toString()) {
+      setState(() {
+        lists = tmpLists;
+      });
+    }
+  }
+
+  DateTime onlyDate(String date) {
+    return DateTime.parse(
+        DateFormat("yyyy-MM-dd").format(DateTime.parse(date)));
+  }
 
   Text date(DateTime date) {
+    final today = DateTime(now.year, now.month, now.day);
     final tomorrow = DateTime(now.year, now.month, now.day + 1);
+    if (date == today) {
+      return Text(
+        AppLocalizations.of(context)!.today,
+        style: Theme.of(context).textTheme.headline4?.copyWith(
+            color: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.w500),
+      );
+    }
     if (date == tomorrow) {
       return Text(AppLocalizations.of(context)!.tomorrow,
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -81,6 +130,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Text lastDate(DateTime date) {
+    final tomorrow = DateTime(now.year, now.month, now.day + 1);
+
+    if (date == tomorrow) {
+      return Text(AppLocalizations.of(context)!.tomorrow,
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: Theme.of(context).shadowColor,
+              ));
+    }
     return Text(DateFormat('EE, d. MMM.').format(date),
         style: Theme.of(context).textTheme.labelLarge?.copyWith(
               color: Theme.of(context).shadowColor,
@@ -89,6 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    getLists();
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -98,27 +156,10 @@ class _MyHomePageState extends State<MyHomePage> {
       body: ListView(
         padding: const EdgeInsets.only(top: 48, left: 15, right: 15),
         children: [
-          DateItem(
-              title: Text(
-                AppLocalizations.of(context)!.today,
-                style: Theme.of(context).textTheme.headline4?.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w500),
-              ),
-              radios: const []),
-          DateItem(
-              title: date(DateTime(now.year, now.month, now.day + 1)),
-              radios: [
-                widget.title,
-                "Erinnerungen - Gestern, 22:00, Wöchentlich am Sonntag, Montag"
-              ]),
-          DateItem(
-              title: date(DateTime(now.year, now.month, now.day + 2)),
-              radios: const ["Coop...", "bla"]),
-          DateItem(
-              title: lastDate(DateTime(now.year, now.month, now.day + 3)),
-              radios: const [],
-              divider: false),
+          ...lists.keys
+              .map((key) => DateItem(title: date(key), radios: lists[key])),
+          DateItem(title: lastDate(lastDay), radios: const [], divider: false),
+          const Padding(padding: EdgeInsets.all(60)),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyRadioListTileInput extends StatefulWidget {
   const MyRadioListTileInput({super.key});
@@ -8,11 +9,28 @@ class MyRadioListTileInput extends StatefulWidget {
 }
 
 class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
+  late TextEditingController textEditingController;
+
   static const List<String> _kOptions = <String>[
     'aardvark',
     'bobcat',
     'chameleon',
   ];
+
+  Future<void> _newList(
+      String value, TextEditingController textEditingController) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String>? activeLists = prefs.getStringList("active");
+    activeLists ??= [];
+    String key = '$value,${DateTime.now()}';
+    activeLists?.add(key);
+    debugPrint('You just selected $key');
+    await prefs.setStringList("active", activeLists);
+    setState(() {
+      textEditingController.clear();
+      FocusScope.of(context).unfocus();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +45,19 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
             Expanded(
                 child: LayoutBuilder(
                     builder: (context, constraints) => Autocomplete<String>(
-                          fieldViewBuilder: (context, textEditingController,
-                              focusNode, onFieldSubmitted) {
+                          fieldViewBuilder: (context,
+                              fieldTextEditingController,
+                              focusNode,
+                              onFieldSubmitted) {
+                            textEditingController = fieldTextEditingController;
                             return TextField(
+                              scrollPadding: const EdgeInsets.only(bottom: 120),
                               controller: textEditingController,
                               focusNode: focusNode,
                               decoration: const InputDecoration(
                                   border: InputBorder.none),
+                              onSubmitted: ((value) =>
+                                  _newList(value, textEditingController)),
                             );
                           },
                           optionsViewBuilder: (context, onSelected, options) =>
@@ -48,6 +72,8 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
                                         height: 40.0 * options.length,
                                         width: constraints.biggest.width,
                                         child: ListView.separated(
+                                          physics:
+                                              const ClampingScrollPhysics(),
                                           padding: EdgeInsets.zero,
                                           itemCount: options.length,
                                           shrinkWrap: false,
@@ -82,9 +108,8 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
                                   textEditingValue.text.toLowerCase());
                             });
                           },
-                          onSelected: (String selection) {
-                            debugPrint('You just selected $selection');
-                          },
+                          onSelected: (selection) =>
+                              _newList(selection, textEditingController),
                         )))
           ],
         ),
