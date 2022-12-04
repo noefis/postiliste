@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:postiliste/custom_radio_input.dart';
 import 'package:postiliste/dark_theme_styles.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:postiliste/date_item.dart';
 
 import 'custom_radio.dart';
 import 'dark_theme_provider.dart';
@@ -64,6 +66,21 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List values = [];
+  final now = DateTime.now();
+
+  Text date(DateTime date) {
+    final tomorrow = DateTime(now.year, now.month, now.day + 1);
+    if (date == tomorrow) {
+      return Text(AppLocalizations.of(context)!.tomorrow,
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: Theme.of(context).disabledColor,
+              ));
+    }
+    return Text(DateFormat('EE, d. MMM.').format(date),
+        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: Theme.of(context).disabledColor,
+            ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,21 +93,26 @@ class _MyHomePageState extends State<MyHomePage> {
       body: ListView(
         padding: const EdgeInsets.only(top: 48, left: 15, right: 15),
         children: [
-          Text(
-            AppLocalizations.of(context)!.today,
-            style: Theme.of(context).textTheme.headline4,
-          ),
-          const Padding(padding: EdgeInsets.all(6)),
-          Column(
-            children: [
-              MyRadioListTile(title: widget.title),
-              const MyRadioListTile(
-                  title:
-                      "Erinnerungen - Gestern, 22:00, Wöchentlich am Sonntag, Montag"),
-              const MyRadioListTileInput(),
-              Divider(color: Theme.of(context).disabledColor),
-            ],
-          )
+          DateItem(
+              title: Text(
+                AppLocalizations.of(context)!.today,
+                style: Theme.of(context).textTheme.headline4?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w500),
+              ),
+              radios: const []),
+          DateItem(
+              title: date(DateTime(now.year, now.month, now.day + 1)),
+              radios: [
+                widget.title,
+                "Erinnerungen - Gestern, 22:00, Wöchentlich am Sonntag, Montag"
+              ]),
+          DateItem(
+              title: date(DateTime(now.year, now.month, now.day + 2)),
+              radios: const ["Coop...", "bla"]),
+          DateItem(
+              title: date(DateTime(now.year, now.month, now.day + 3)),
+              radios: const ["Migros...", "bla"]),
         ],
       ),
     );

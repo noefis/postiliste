@@ -6,5 +6,8 @@
     "@helloWorld": {},
 
     "today": "Heute",
-    "@today": {}
+    "@today": {},
+
+    "tomorrow": "Morgen",
+    "@tomorrow": {}
 }
