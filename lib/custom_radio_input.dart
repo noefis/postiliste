@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyRadioListTileInput extends StatefulWidget {
-  const MyRadioListTileInput({super.key});
+  final Function() notifyParent;
+
+  const MyRadioListTileInput({super.key, required this.notifyParent});
 
   @override
   State<MyRadioListTileInput> createState() => _MyRadioListTileInput();
@@ -20,16 +22,15 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
   Future<void> _newList(
       String value, TextEditingController textEditingController) async {
     final prefs = await SharedPreferences.getInstance();
-    List<String>? activeLists = prefs.getStringList("active");
-    activeLists ??= [];
+    List<String>? activeLists = prefs.getStringList("active") ?? [];
     String key = '$value,${DateTime.now()}';
-    activeLists?.add(key);
-    debugPrint('You just selected $key');
+    activeLists.add(key);
     await prefs.setStringList("active", activeLists);
     setState(() {
       textEditingController.clear();
       FocusScope.of(context).unfocus();
     });
+    widget.notifyParent();
   }
 
   @override
@@ -104,12 +105,10 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
                               return const Iterable<String>.empty();
                             }
                             return _kOptions.where((String option) {
-                              return option.contains(
+                              return option.toLowerCase().contains(
                                   textEditingValue.text.toLowerCase());
                             });
                           },
-                          onSelected: (selection) =>
-                              _newList(selection, textEditingController),
                         )))
           ],
         ),

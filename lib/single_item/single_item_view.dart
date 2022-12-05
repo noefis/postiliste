@@ -4,8 +4,10 @@ import 'package:postiliste/single_item/custom_radio_item.dart';
 
 class SingleItemViewRoute extends StatefulWidget {
   final String title;
+  final String prefKey;
 
-  const SingleItemViewRoute({super.key, required this.title});
+  const SingleItemViewRoute(
+      {super.key, required this.title, required this.prefKey});
 
   @override
   State<SingleItemViewRoute> createState() => _SingleItemView();
@@ -30,7 +32,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
         padding: const EdgeInsets.only(top: 60, left: 20, right: 15),
         children: [
           Hero(
-              tag: widget.title,
+              tag: widget.prefKey,
               child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   margin: const EdgeInsets.symmetric(vertical: 10),

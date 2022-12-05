@@ -64,14 +64,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Map lists = <DateTime, List<String>>{};
+  Map lists = <DateTime, Map<String, String>>{};
   final now = DateTime.now();
   DateTime lastDay = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
 
+  refresh() {
+    getLists();
+  }
+
   Future<void> getLists() async {
     final prefs = await SharedPreferences.getInstance();
-    Map tmpLists = <DateTime, List<String>>{};
+    Map tmpLists = <DateTime, Map<String, String>>{};
 
     List<String>? activeLists = prefs.getStringList("active");
     debugPrint(activeLists.toString());
@@ -79,17 +83,18 @@ class _MyHomePageState extends State<MyHomePage> {
     activeLists?.forEach((active) {
       List actives = active.split(',');
       if (tmpLists.containsKey(onlyDate(actives.last))) {
-        List<String> bla = tmpLists[onlyDate(actives.last)];
-        bla.add(actives.first);
+        Map<String, String> values = tmpLists[onlyDate(actives.last)];
+        values[active] = actives.first;
       } else {
-        List<String> values = [];
-        values.add(actives.first);
+        Map<String, String> values = {};
+        values[active] = actives.first;
         tmpLists[onlyDate(actives.last)] = values;
       }
     });
 
-    if (tmpLists.keys.last.millisecondsSinceEpoch >
-        lastDay.millisecondsSinceEpoch) {
+    if (tmpLists.keys.isNotEmpty &&
+        tmpLists.keys.last.millisecondsSinceEpoch >
+            lastDay.millisecondsSinceEpoch) {
       lastDay = tmpLists.keys.last;
     }
     debugPrint(tmpLists.toString());
@@ -156,9 +161,17 @@ class _MyHomePageState extends State<MyHomePage> {
       body: ListView(
         padding: const EdgeInsets.only(top: 48, left: 15, right: 15),
         children: [
-          ...lists.keys
-              .map((key) => DateItem(title: date(key), radios: lists[key])),
-          DateItem(title: lastDate(lastDay), radios: const [], divider: false),
+          ...lists.keys.map((key) => DateItem(
+                title: date(key),
+                radios: lists[key],
+                notifyParent: refresh,
+              )),
+          DateItem(
+            title: lastDate(lastDay),
+            radios: const {},
+            divider: false,
+            notifyParent: refresh,
+          ),
           const Padding(padding: EdgeInsets.all(60)),
         ],
       ),
