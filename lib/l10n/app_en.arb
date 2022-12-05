@@ -10,5 +10,8 @@
     "@today": {},
     
     "tomorrow": "Tomorrow",
-    "@tomorrow": {}
+    "@tomorrow": {},
+    
+    "overdue": "Overdue",
+    "@overdue": {}
 }

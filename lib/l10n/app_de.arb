@@ -9,5 +9,8 @@
     "@today": {},
 
     "tomorrow": "Morgen",
-    "@tomorrow": {}
+    "@tomorrow": {},
+    
+    "overdue": "Überfällig",
+    "@overdue": {}
 }

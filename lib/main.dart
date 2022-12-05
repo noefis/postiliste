@@ -92,6 +92,13 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     });
 
+    //always show Today
+    if (!tmpLists.containsKey(DateTime(now.year, now.month, now.day))) {
+      Map<String, String> emptyValues = {};
+      tmpLists[DateTime(now.year, now.month, now.day)] = emptyValues;
+    }
+
+    //always show a day after the latest key
     if (tmpLists.keys.isNotEmpty &&
         tmpLists.keys.last.millisecondsSinceEpoch >
             lastDay.millisecondsSinceEpoch) {
@@ -107,6 +114,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   DateTime onlyDate(String date) {
+    final yesterday = DateTime(now.year, now.month, now.day - 1);
+
+    if (DateTime.parse(DateFormat("yyyy-MM-dd").format(DateTime.parse(date)))
+            .millisecondsSinceEpoch <
+        yesterday.millisecondsSinceEpoch) {
+      return yesterday;
+    }
     return DateTime.parse(
         DateFormat("yyyy-MM-dd").format(DateTime.parse(date)));
   }
@@ -114,15 +128,23 @@ class _MyHomePageState extends State<MyHomePage> {
   Text date(DateTime date) {
     final today = DateTime(now.year, now.month, now.day);
     final tomorrow = DateTime(now.year, now.month, now.day + 1);
-    if (date == today) {
+    final yesterday = DateTime(now.year, now.month, now.day - 1);
+    if (date == yesterday) {
+      return Text(
+        AppLocalizations.of(context)!.overdue,
+        style: Theme.of(context).textTheme.headline4?.copyWith(
+            fontSize: 29,
+            color: Theme.of(context).errorColor,
+            fontWeight: FontWeight.w500),
+      );
+    } else if (date == today) {
       return Text(
         AppLocalizations.of(context)!.today,
         style: Theme.of(context).textTheme.headline4?.copyWith(
             color: Theme.of(context).colorScheme.primary,
             fontWeight: FontWeight.w500),
       );
-    }
-    if (date == tomorrow) {
+    } else if (date == tomorrow) {
       return Text(AppLocalizations.of(context)!.tomorrow,
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
                 color: Theme.of(context).disabledColor,
