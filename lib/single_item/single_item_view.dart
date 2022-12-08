@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:postiliste/single_item/custom_radio_input_item.dart';
 import 'package:postiliste/single_item/custom_radio_item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SingleItemViewRoute extends StatefulWidget {
   final String title;
@@ -14,8 +15,28 @@ class SingleItemViewRoute extends StatefulWidget {
 }
 
 class _SingleItemView extends State<SingleItemViewRoute> {
+  List<String> _list = [];
+
+  void _getList() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> activeList =
+        prefs.getStringList(widget.prefKey + widget.title) ?? [];
+
+    if (activeList.toString() != _list.toString()) {
+      setState(() {
+        _list = activeList;
+      });
+    }
+    debugPrint(activeList.toString());
+  }
+
+  refresh() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
+    _getList();
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -45,14 +66,17 @@ class _SingleItemView extends State<SingleItemViewRoute> {
                           .textTheme
                           .headline6
                           ?.copyWith(color: Theme.of(context).disabledColor)))),
-          const SingleItemRadio(title: "title"),
-          const SingleItemRadio(title: "title"),
-          const SingleItemRadio(title: "title"),
-          const SingleItemRadio(title: "title"),
-          const SingleItemRadio(title: "title"),
-          const SingleItemRadio(title: "title"),
-          const SingleItemRadioInput(),
-          const Padding(padding: EdgeInsets.all(60)),
+          ..._list.map(
+            (title) => SingleItemRadio(
+              title: title,
+              prefKey: widget.prefKey + widget.title,
+              active: false,
+              notifyParent: refresh,
+            ),
+          ),
+          SingleItemRadioInput(
+              prefKey: widget.prefKey + widget.title, notifyParent: refresh),
+          const Padding(padding: EdgeInsets.all(90)),
         ]);
   }
 }

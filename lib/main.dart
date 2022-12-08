@@ -70,10 +70,10 @@ class _MyHomePageState extends State<MyHomePage> {
       DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
 
   refresh() {
-    getLists();
+    _getLists();
   }
 
-  Future<void> getLists() async {
+  Future<void> _getLists() async {
     final prefs = await SharedPreferences.getInstance();
     Map tmpLists = <DateTime, Map<String, String>>{};
 
@@ -173,7 +173,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    getLists();
+    _getLists();
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
