@@ -78,7 +78,6 @@ class _MyHomePageState extends State<MyHomePage> {
     Map tmpLists = <DateTime, Map<String, String>>{};
 
     List<String>? activeLists = prefs.getStringList("active");
-    debugPrint(activeLists.toString());
 
     activeLists?.forEach((active) {
       List actives = active.split(',');
@@ -106,7 +105,6 @@ class _MyHomePageState extends State<MyHomePage> {
             lastDay.millisecondsSinceEpoch) {
       lastDay = tmpLists.keys.last;
     }
-    debugPrint(tmpLists.toString());
 
     if (lists.toString() != tmpLists.toString()) {
       setState(() {
