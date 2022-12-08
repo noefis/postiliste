@@ -63,6 +63,7 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
       List<String> activeLists = prefs.getStringList("active") ?? [];
       if (activeLists.remove(_toRemoveKey)) {
         prefs.setStringList("active", activeLists);
+        prefs.remove(widget.prefKey);
         widget.notifyParent();
       }
       //in case of error, return radio to initial state
@@ -140,6 +141,7 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
     return GestureDetector(
         onTap: () => _tapAction(),
         child: Container(
+            margin: const EdgeInsets.only(bottom: 1),
             constraints: const BoxConstraints(
                 maxWidth: 25, maxHeight: 25, minHeight: 25, minWidth: 25),
             decoration: BoxDecoration(

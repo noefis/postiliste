@@ -12,5 +12,8 @@
     "@tomorrow": {},
     
     "overdue": "Überfällig",
-    "@overdue": {}
+    "@overdue": {},
+        
+    "done": "Erledigt",
+    "@done": {}
 }

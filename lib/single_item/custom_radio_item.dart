@@ -19,6 +19,7 @@ class SingleItemRadio extends StatefulWidget {
 }
 
 class _SingleItemRadio<T> extends State<SingleItemRadio> {
+  String _key = "";
   String _title = "";
 
   void _tapAction() async {
@@ -27,9 +28,9 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
       List<String> activeList = prefs.getStringList(widget.prefKey) ?? [];
       if (activeList.remove(widget.title)) {
         if (widget.active) {
-          activeList.add("${widget.title!}_deactivated");
+          activeList.add(widget.title!.replaceAll('_deactivated', ''));
         } else {
-          activeList.add(_title);
+          activeList.add("_deactivated${widget.title!}");
         }
 
         prefs.setStringList(widget.prefKey, activeList);
@@ -40,39 +41,46 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
 
   @override
   Widget build(BuildContext context) {
-    _title = (widget.active
-        ? widget.title?.replaceAll("__deactivated", "")
-        : widget.title)!;
+    _key = widget.active
+        ? widget.title!.replaceAll('_deactivated', '')
+        : widget.title!.replaceAll('_deactivated', '');
+    List<String> tmp = _key.split(',');
+    tmp.removeLast();
+    _title = tmp.join(",");
 
-    return InkWell(
-      onTap: () => _tapAction(),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        margin: const EdgeInsets.symmetric(vertical: 3),
-        child: Row(
-          children: [
-            _customRadioButton,
-            const SizedBox(width: 12),
-            Expanded(
-                child: Container(
-              padding: const EdgeInsets.only(bottom: 13, top: 7),
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: Theme.of(context).hoverColor))),
-              child: Text(_title.split(',').first,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: widget.active
-                          ? Theme.of(context).disabledColor
-                          : Theme.of(context).unselectedWidgetColor)),
-            ))
-          ],
-        ),
-      ),
-    );
+    return Opacity(
+        opacity: widget.active ? 0.6 : 1.0,
+        child: InkWell(
+          onTap: () => _tapAction(),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            margin: const EdgeInsets.symmetric(vertical: 3),
+            child: Row(
+              children: [
+                _customRadioButton,
+                const SizedBox(width: 12),
+                Expanded(
+                    child: Container(
+                  padding: const EdgeInsets.only(bottom: 13, top: 7),
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom:
+                              BorderSide(color: Theme.of(context).hoverColor))),
+                  child: Text(_title,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: widget.active
+                              ? Theme.of(context).disabledColor
+                              : Theme.of(context).unselectedWidgetColor)),
+                ))
+              ],
+            ),
+          ),
+        ));
   }
 
   Widget get _customRadioButton {
     return Container(
+        margin: const EdgeInsets.only(bottom: 6),
         constraints: const BoxConstraints(
             maxWidth: 25, maxHeight: 25, minHeight: 25, minWidth: 25),
         decoration: BoxDecoration(

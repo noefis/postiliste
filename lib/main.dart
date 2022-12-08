@@ -82,13 +82,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
     activeLists?.forEach((active) {
       List actives = active.split(',');
-      if (tmpLists.containsKey(onlyDate(actives.last))) {
-        Map<String, String> values = tmpLists[onlyDate(actives.last)];
-        values[active] = actives.first;
+      DateTime date = onlyDate(actives.last);
+      actives.removeLast();
+      if (tmpLists.containsKey(date)) {
+        Map<String, String> values = tmpLists[date];
+        values[active] = actives.join(",");
       } else {
         Map<String, String> values = {};
-        values[active] = actives.first;
-        tmpLists[onlyDate(actives.last)] = values;
+        values[active] = actives.join(",");
+        tmpLists[date] = values;
       }
     });
 
