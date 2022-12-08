@@ -79,28 +79,30 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
         onEnd: _visible ? () => {} : () => _removeWidget(),
         child: InkWell(
           onTap: () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (_, __, ___) => SingleItemViewRoute(
-                    title: widget.title!, prefKey: widget.prefKey),
-                transitionDuration: const Duration(milliseconds: 320),
-                reverseTransitionDuration: const Duration(milliseconds: 300),
-                transitionsBuilder: (context, animation, _, child) {
-                  const begin = Offset(1, 0.0);
-                  const end = Offset.zero;
-                  const curve = Curves.easeInOutSine;
+            if (!_value) {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => SingleItemViewRoute(
+                      title: widget.title!, prefKey: widget.prefKey),
+                  transitionDuration: const Duration(milliseconds: 320),
+                  reverseTransitionDuration: const Duration(milliseconds: 300),
+                  transitionsBuilder: (context, animation, _, child) {
+                    const begin = Offset(1, 0.0);
+                    const end = Offset.zero;
+                    const curve = Curves.easeInOutSine;
 
-                  var tween = Tween(begin: begin, end: end)
-                      .chain(CurveTween(curve: curve));
+                    var tween = Tween(begin: begin, end: end)
+                        .chain(CurveTween(curve: curve));
 
-                  return SlideTransition(
-                    position: animation.drive(tween),
-                    child: child,
-                  );
-                },
-              ),
-            );
+                    return SlideTransition(
+                      position: animation.drive(tween),
+                      child: child,
+                    );
+                  },
+                ),
+              );
+            }
           },
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),

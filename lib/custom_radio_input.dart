@@ -13,28 +13,68 @@ class MyRadioListTileInput extends StatefulWidget {
 class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
   late TextEditingController textEditingController;
 
-  static const List<String> _kOptions = <String>[
-    'aardvark',
-    'bobcat',
-    'chameleon',
-  ];
+  List<String> _kOptions = <String>[];
+
+  void _getAutoComplete() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> autoCompleteList =
+        prefs.getStringList("autoCompleteList") ?? [];
+
+    if (_kOptions.toString() != autoCompleteList.toString()) {
+      setState(() {
+        _kOptions = autoCompleteList;
+      });
+    }
+  }
 
   Future<void> _newList(
       String value, TextEditingController textEditingController) async {
-    final prefs = await SharedPreferences.getInstance();
-    List<String>? activeLists = prefs.getStringList("active") ?? [];
-    String key = '$value,${DateTime.now()}';
-    activeLists.add(key);
-    await prefs.setStringList("active", activeLists);
+    if (value.isNotEmpty) {
+      final prefs = await SharedPreferences.getInstance();
+      _putActive(prefs, value);
+      _putAutoCompleteList(prefs, value);
+    }
     setState(() {
       textEditingController.clear();
       FocusScope.of(context).unfocus();
     });
-    widget.notifyParent();
+    if (value.isNotEmpty) {
+      widget.notifyParent();
+    }
+  }
+
+  void _putActive(prefs, value) {
+    List<String> activeLists = prefs.getStringList("active") ?? [];
+    String key = '$value,${DateTime.now()}';
+    activeLists.add(key);
+    prefs.setStringList("active", activeLists);
+  }
+
+  void _putAutoCompleteList(prefs, value) {
+    List<String> autoCompleteList =
+        prefs.getStringList("autoCompleteList") ?? [];
+    if (!autoCompleteList.contains(value)) {
+      autoCompleteList.add(value);
+      prefs.setStringList("autoCompleteList", autoCompleteList);
+    }
+  }
+
+  void _removeFromAutoCompleteList(value) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> autoCompleteList =
+        prefs.getStringList("autoCompleteList") ?? [];
+    if (autoCompleteList.remove(value)) {
+      _kOptions.remove(value);
+      prefs.setStringList("autoCompleteList", autoCompleteList);
+      setState(() {});
+    } else {
+      debugPrint("ERROR: could not remove existing autocomplete item");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    _getAutoComplete();
     return InkWell(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -52,7 +92,7 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
                               onFieldSubmitted) {
                             textEditingController = fieldTextEditingController;
                             return TextField(
-                              scrollPadding: const EdgeInsets.only(bottom: 120),
+                              scrollPadding: const EdgeInsets.only(bottom: 320),
                               controller: textEditingController,
                               focusNode: focusNode,
                               decoration: const InputDecoration(
@@ -89,7 +129,21 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 16,
                                                         vertical: 5),
-                                                child: Text(option),
+                                                child: Row(children: [
+                                                  Expanded(child: Text(option)),
+                                                  IconButton(
+                                                    icon: const Icon(
+                                                      Icons
+                                                          .remove_circle_outline,
+                                                      color: Colors.pink,
+                                                      size: 24.0,
+                                                      semanticLabel: 'Remove',
+                                                    ),
+                                                    onPressed: () =>
+                                                        _removeFromAutoCompleteList(
+                                                            option),
+                                                  ),
+                                                ]),
                                               ),
                                             );
                                           },
