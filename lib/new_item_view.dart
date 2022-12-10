@@ -202,7 +202,7 @@ class _NewItemView extends State<NewItemViewRoute> {
 
   Widget datePicker() {
     return Container(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(10),
         height: MediaQuery.of(context).size.width / 3,
         child: Center(
             child: TextField(
