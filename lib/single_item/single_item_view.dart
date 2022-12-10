@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:postiliste/single_item/change_item_view.dart';
 import 'package:postiliste/single_item/custom_radio_input_item.dart';
 import 'package:postiliste/single_item/custom_radio_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SingleItemViewRoute extends StatefulWidget {
-  final String title;
-  final String prefKey;
+  String title;
+  String prefKey;
   final Function() notifyParent;
 
-  const SingleItemViewRoute(
+  SingleItemViewRoute(
       {super.key,
       required this.title,
       required this.prefKey,
@@ -39,6 +40,15 @@ class _SingleItemView extends State<SingleItemViewRoute> {
     setState(() {});
   }
 
+  updateInfo(String value, DateTime dateTime) {
+    String key = '$value,$dateTime';
+    setState(() {
+      widget.prefKey = key;
+      widget.title = value;
+    });
+    widget.notifyParent();
+  }
+
   _setAllDone() {
     _allDone =
         (_list.where((title) => !title.contains("_deactivated")).isEmpty &&
@@ -58,6 +68,33 @@ class _SingleItemView extends State<SingleItemViewRoute> {
     }
   }
 
+  _newItemPush() {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => ChangeItemViewRoute(
+            notifyParent: updateInfo,
+            input: widget.title,
+            dateTime: DateTime.parse(widget.prefKey.split(',').last)),
+        transitionDuration: const Duration(milliseconds: 210),
+        reverseTransitionDuration: const Duration(milliseconds: 200),
+        transitionsBuilder: (context, animation, _, child) {
+          const begin = Offset(0.0, 1);
+          const end = Offset.zero;
+          const curve = Curves.easeInOutSine;
+
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     _setAllDone();
@@ -68,6 +105,13 @@ class _SingleItemView extends State<SingleItemViewRoute> {
         iconTheme: IconThemeData(color: Theme.of(context).colorScheme.primary),
         elevation: 0,
         backgroundColor: Colors.transparent,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            tooltip: 'Show list info',
+            onPressed: () => _newItemPush(),
+          )
+        ],
       ),
       body: singleItemView(context),
     );
