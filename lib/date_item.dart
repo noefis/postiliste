@@ -9,6 +9,7 @@ class DateItem extends StatefulWidget {
   final bool divider;
   final Function() notifyParent;
   final bool isEmpty;
+  final DateTime dateTime;
 
   const DateItem(
       {super.key,
@@ -16,7 +17,8 @@ class DateItem extends StatefulWidget {
       required this.radios,
       this.divider = true,
       required this.notifyParent,
-      this.isEmpty = false});
+      this.isEmpty = false,
+      required this.dateTime});
 
   @override
   State<DateItem> createState() => _DateItem();
@@ -43,6 +45,7 @@ class _DateItem<T> extends State<DateItem> {
               ),
             MyRadioListTileInput(
               notifyParent: refresh,
+              dateTime: widget.dateTime,
               isFocused: widget.isEmpty && widget.title.data == "Today",
             ),
             Divider(

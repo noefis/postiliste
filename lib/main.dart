@@ -104,9 +104,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
     //always show a day after the latest key
     if (tmpLists.keys.isNotEmpty &&
-        tmpLists.keys.last.millisecondsSinceEpoch >
+        tmpLists.keys.last.millisecondsSinceEpoch >=
             lastDay.millisecondsSinceEpoch) {
       lastDay = tmpLists.keys.last;
+      lastDay = DateTime(lastDay.year, lastDay.month, lastDay.day + 1);
     }
 
     if (_lists.toString() != tmpLists.toString()) {
@@ -161,6 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Text lastDate(DateTime date) {
     final tomorrow = DateTime(_now.year, _now.month, _now.day + 1);
+    debugPrint(date.toString() + tomorrow.toString());
 
     if (date == tomorrow) {
       return Text(AppLocalizations.of(context)!.tomorrow,
@@ -187,12 +189,14 @@ class _MyHomePageState extends State<MyHomePage> {
         padding: const EdgeInsets.only(top: 48, left: 15, right: 15),
         children: [
           ..._lists.keys.map((key) => DateItem(
+                dateTime: key,
                 title: date(key),
                 radios: _lists[key],
                 notifyParent: refresh,
                 isEmpty: _isEmpty,
               )),
           DateItem(
+            dateTime: lastDay,
             title: lastDate(lastDay),
             radios: const {},
             divider: false,

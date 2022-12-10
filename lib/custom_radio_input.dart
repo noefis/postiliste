@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:postiliste/date_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //ignore: must_be_immutable
 class MyRadioListTileInput extends StatefulWidget {
   final Function() notifyParent;
+  final DateTime dateTime;
   bool isFocused;
 
   MyRadioListTileInput(
-      {super.key, required this.notifyParent, this.isFocused = false});
+      {super.key,
+      required this.notifyParent,
+      this.isFocused = false,
+      required this.dateTime});
 
   @override
   State<MyRadioListTileInput> createState() => _MyRadioListTileInput();
@@ -51,7 +56,15 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
 
   void _putActive(prefs, value) {
     List<String> activeLists = prefs.getStringList("active") ?? [];
-    String key = '$value,${DateTime.now()}';
+    DateTime date = DateTime(
+        widget.dateTime.year,
+        widget.dateTime.month,
+        widget.dateTime.day,
+        DateTime.now().hour,
+        DateTime.now().minute,
+        DateTime.now().second,
+        DateTime.now().millisecond);
+    String key = '$value,$date';
     activeLists.add(key);
     prefs.setStringList("active", activeLists);
   }
@@ -81,7 +94,6 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
   @override
   Widget build(BuildContext context) {
     _wasFocused = widget.isFocused == true ? true : _wasFocused;
-    debugPrint(_wasFocused.toString());
     _getAutoComplete();
     return InkWell(
       child: AnimatedOpacity(
