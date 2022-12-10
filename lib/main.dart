@@ -105,6 +105,12 @@ class _MyHomePageState extends State<MyHomePage> {
       tmpLists[DateTime(_now.year, _now.month, _now.day)] = emptyValues;
     }
 
+    //always show Tomorrow
+    if (!tmpLists.containsKey(DateTime(_now.year, _now.month, _now.day + 1))) {
+      Map<String, String> emptyValues = {};
+      tmpLists[DateTime(_now.year, _now.month, _now.day + 1)] = emptyValues;
+    }
+
     //always show a day after the latest key
     if (tmpLists.keys.isNotEmpty &&
         tmpLists.keys.last.millisecondsSinceEpoch >=
