@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+//ignore: must_be_immutable
 class MyRadioListTileInput extends StatefulWidget {
   final Function() notifyParent;
+  bool isFocused;
 
-  const MyRadioListTileInput({super.key, required this.notifyParent});
+  MyRadioListTileInput(
+      {super.key, required this.notifyParent, this.isFocused = false});
 
   @override
   State<MyRadioListTileInput> createState() => _MyRadioListTileInput();
@@ -12,6 +15,8 @@ class MyRadioListTileInput extends StatefulWidget {
 
 class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
   late TextEditingController textEditingController;
+  bool _visible = true;
+  bool _wasFocused = false;
 
   List<String> _kOptions = <String>[];
 
@@ -35,6 +40,7 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
       _putAutoCompleteList(prefs, value);
     }
     setState(() {
+      _wasFocused = false;
       textEditingController.clear();
       FocusScope.of(context).unfocus();
     });
@@ -74,99 +80,153 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
 
   @override
   Widget build(BuildContext context) {
+    _wasFocused = widget.isFocused == true ? true : _wasFocused;
+    debugPrint(_wasFocused.toString());
     _getAutoComplete();
     return InkWell(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        margin: const EdgeInsets.symmetric(vertical: 3),
-        child: Row(
-          children: [
-            _customRadioButton,
-            const SizedBox(width: 12),
-            Expanded(
-                child: LayoutBuilder(
-                    builder: (context, constraints) => Autocomplete<String>(
-                          fieldViewBuilder: (context,
-                              fieldTextEditingController,
-                              focusNode,
-                              onFieldSubmitted) {
-                            textEditingController = fieldTextEditingController;
-                            return TextField(
-                              scrollPadding: const EdgeInsets.only(bottom: 320),
-                              controller: textEditingController,
-                              focusNode: focusNode,
-                              decoration: const InputDecoration(
-                                  border: InputBorder.none),
-                              onSubmitted: ((value) =>
-                                  _newList(value, textEditingController)),
-                            );
-                          },
-                          optionsViewBuilder: (context, onSelected, options) =>
-                              Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Material(
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.vertical(
-                                            bottom: Radius.circular(4.0)),
-                                      ),
-                                      child: SizedBox(
-                                        height: 40.0 * options.length,
-                                        width: constraints.biggest.width,
-                                        child: ListView.separated(
-                                          physics:
-                                              const ClampingScrollPhysics(),
-                                          padding: EdgeInsets.zero,
-                                          itemCount: options.length,
-                                          shrinkWrap: false,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            final String option =
-                                                options.elementAt(index);
-                                            return InkWell(
-                                              onTap: () => onSelected(option),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
+      child: AnimatedOpacity(
+          duration: const Duration(milliseconds: 250),
+          opacity: _visible ? 1.0 : 0.1,
+          onEnd: () => {
+                setState(() => {
+                      _visible ? null : widget.isFocused = false,
+                      _visible = true
+                    })
+              },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            margin: const EdgeInsets.symmetric(vertical: 3),
+            decoration: BoxDecoration(
+                border: Border.all(
+                    color: widget.isFocused
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).primaryColor,
+                    width: widget.isFocused ? 1 : 0),
+                borderRadius: const BorderRadius.all(Radius.circular(15))),
+            child: Row(
+              children: [
+                widget.isFocused
+                    ? const Padding(padding: EdgeInsets.all(1))
+                    : _customRadioButton,
+                const SizedBox(width: 12),
+                Expanded(
+                    child: LayoutBuilder(
+                        builder: (context, constraints) => Autocomplete<String>(
+                              fieldViewBuilder: (context,
+                                  fieldTextEditingController,
+                                  focusNode,
+                                  onFieldSubmitted) {
+                                textEditingController =
+                                    fieldTextEditingController;
+                                return TextField(
+                                  scrollPadding:
+                                      const EdgeInsets.only(bottom: 320),
+                                  controller: textEditingController,
+                                  focusNode: focusNode,
+                                  decoration: InputDecoration(
+                                      hintStyle: TextStyle(
+                                          color: widget.isFocused
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                              : Theme.of(context).shadowColor),
+                                      hintText: widget.isFocused
+                                          ? "Create a new List"
+                                          : _wasFocused
+                                              ? "Name of the new List"
+                                              : "",
+                                      border: InputBorder.none),
+                                  onSubmitted: ((value) =>
+                                      _newList(value, textEditingController)),
+                                  onTap: () => {
+                                    setState(() {
+                                      widget.isFocused
+                                          ? _visible = false
+                                          : null;
+                                    })
+                                  },
+                                  onChanged: (value) => {
+                                    if (widget.isFocused)
+                                      {
+                                        setState(() {
+                                          _visible = false;
+                                        })
+                                      }
+                                  },
+                                );
+                              },
+                              optionsViewBuilder:
+                                  (context, onSelected, options) => Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Material(
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.vertical(
+                                                bottom: Radius.circular(4.0)),
+                                          ),
+                                          child: SizedBox(
+                                            height: 60.0 * options.length,
+                                            width: constraints.biggest.width,
+                                            child: ListView.separated(
+                                              physics:
+                                                  const ClampingScrollPhysics(),
+                                              padding: EdgeInsets.zero,
+                                              itemCount: options.length,
+                                              shrinkWrap: false,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                final String option =
+                                                    options.elementAt(index);
+                                                return InkWell(
+                                                  onTap: () =>
+                                                      onSelected(option),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
                                                         horizontal: 16,
                                                         vertical: 5),
-                                                child: Row(children: [
-                                                  Expanded(child: Text(option)),
-                                                  IconButton(
-                                                    icon: const Icon(
-                                                      Icons
-                                                          .remove_circle_outline,
-                                                      color: Colors.pink,
-                                                      size: 24.0,
-                                                      semanticLabel: 'Remove',
-                                                    ),
-                                                    onPressed: () =>
-                                                        _removeFromAutoCompleteList(
-                                                            option),
+                                                    child: Row(children: [
+                                                      Expanded(
+                                                          child: Text(option)),
+                                                      IconButton(
+                                                        icon: const Icon(
+                                                          Icons
+                                                              .remove_circle_outline,
+                                                          color: Colors.pink,
+                                                          size: 24.0,
+                                                          semanticLabel:
+                                                              'Remove',
+                                                        ),
+                                                        onPressed: () =>
+                                                            _removeFromAutoCompleteList(
+                                                                option),
+                                                      ),
+                                                    ]),
                                                   ),
-                                                ]),
-                                              ),
-                                            );
-                                          },
-                                          separatorBuilder: (context, index) {
-                                            return Divider(
-                                                color: Theme.of(context)
-                                                    .hoverColor);
-                                          },
-                                        ),
-                                      ))),
-                          optionsBuilder: (TextEditingValue textEditingValue) {
-                            if (textEditingValue.text == '') {
-                              return const Iterable<String>.empty();
-                            }
-                            return _kOptions.where((String option) {
-                              return option.toLowerCase().contains(
-                                  textEditingValue.text.toLowerCase());
-                            });
-                          },
-                        )))
-          ],
-        ),
-      ),
+                                                );
+                                              },
+                                              separatorBuilder:
+                                                  (context, index) {
+                                                return Divider(
+                                                    color: Theme.of(context)
+                                                        .hoverColor);
+                                              },
+                                            ),
+                                          ))),
+                              optionsBuilder:
+                                  (TextEditingValue textEditingValue) {
+                                if (textEditingValue.text == '') {
+                                  return const Iterable<String>.empty();
+                                }
+                                return _kOptions.where((String option) {
+                                  return option.toLowerCase().contains(
+                                      textEditingValue.text.toLowerCase());
+                                });
+                              },
+                            )))
+              ],
+            ),
+          )),
     );
   }
 

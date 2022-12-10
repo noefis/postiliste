@@ -8,13 +8,15 @@ class DateItem extends StatefulWidget {
   final Map<String, String> radios;
   final bool divider;
   final Function() notifyParent;
+  final bool isEmpty;
 
   const DateItem(
       {super.key,
       required this.title,
       required this.radios,
       this.divider = true,
-      required this.notifyParent});
+      required this.notifyParent,
+      this.isEmpty = false});
 
   @override
   State<DateItem> createState() => _DateItem();
@@ -39,7 +41,10 @@ class _DateItem<T> extends State<DateItem> {
                 prefKey: key,
                 notifyParent: refresh,
               ),
-            MyRadioListTileInput(notifyParent: refresh),
+            MyRadioListTileInput(
+              notifyParent: refresh,
+              isFocused: widget.isEmpty && widget.title.data == "Today",
+            ),
             Divider(
                 color: widget.divider
                     ? Theme.of(context).disabledColor

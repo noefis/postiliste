@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dark_theme_provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -64,8 +65,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Map lists = <DateTime, Map<String, String>>{};
-  final now = DateTime.now();
+  Map _lists = <DateTime, Map<String, String>>{};
+  final _now = DateTime.now();
+  bool _isEmpty = false;
   DateTime lastDay = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
 
@@ -78,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Map tmpLists = <DateTime, Map<String, String>>{};
 
     List<String>? activeLists = prefs.getStringList("active");
+    _isEmpty = (activeLists == null || activeLists.isEmpty);
 
     activeLists?.forEach((active) {
       List actives = active.split(',');
@@ -94,9 +97,9 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     //always show Today
-    if (!tmpLists.containsKey(DateTime(now.year, now.month, now.day))) {
+    if (!tmpLists.containsKey(DateTime(_now.year, _now.month, _now.day))) {
       Map<String, String> emptyValues = {};
-      tmpLists[DateTime(now.year, now.month, now.day)] = emptyValues;
+      tmpLists[DateTime(_now.year, _now.month, _now.day)] = emptyValues;
     }
 
     //always show a day after the latest key
@@ -106,15 +109,15 @@ class _MyHomePageState extends State<MyHomePage> {
       lastDay = tmpLists.keys.last;
     }
 
-    if (lists.toString() != tmpLists.toString()) {
+    if (_lists.toString() != tmpLists.toString()) {
       setState(() {
-        lists = tmpLists;
+        _lists = tmpLists;
       });
     }
   }
 
   DateTime onlyDate(String date) {
-    final yesterday = DateTime(now.year, now.month, now.day - 1);
+    final yesterday = DateTime(_now.year, _now.month, _now.day - 1);
 
     if (DateTime.parse(DateFormat("yyyy-MM-dd").format(DateTime.parse(date)))
             .millisecondsSinceEpoch <
@@ -126,9 +129,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Text date(DateTime date) {
-    final today = DateTime(now.year, now.month, now.day);
-    final tomorrow = DateTime(now.year, now.month, now.day + 1);
-    final yesterday = DateTime(now.year, now.month, now.day - 1);
+    final today = DateTime(_now.year, _now.month, _now.day);
+    final tomorrow = DateTime(_now.year, _now.month, _now.day + 1);
+    final yesterday = DateTime(_now.year, _now.month, _now.day - 1);
     if (date == yesterday) {
       return Text(
         AppLocalizations.of(context)!.overdue,
@@ -157,7 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Text lastDate(DateTime date) {
-    final tomorrow = DateTime(now.year, now.month, now.day + 1);
+    final tomorrow = DateTime(_now.year, _now.month, _now.day + 1);
 
     if (date == tomorrow) {
       return Text(AppLocalizations.of(context)!.tomorrow,
@@ -183,10 +186,11 @@ class _MyHomePageState extends State<MyHomePage> {
       body: ListView(
         padding: const EdgeInsets.only(top: 48, left: 15, right: 15),
         children: [
-          ...lists.keys.map((key) => DateItem(
+          ..._lists.keys.map((key) => DateItem(
                 title: date(key),
-                radios: lists[key],
+                radios: _lists[key],
                 notifyParent: refresh,
+                isEmpty: _isEmpty,
               )),
           DateItem(
             title: lastDate(lastDay),

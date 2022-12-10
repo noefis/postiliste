@@ -106,7 +106,7 @@ class _SingleItemRadioInput<T> extends State<SingleItemRadioInput> {
                                             bottom: Radius.circular(4.0)),
                                       ),
                                       child: SizedBox(
-                                        height: 40.0 * options.length,
+                                        height: 60.0 * options.length,
                                         width: constraints.biggest.width,
                                         child: ListView.separated(
                                           padding: EdgeInsets.zero,
