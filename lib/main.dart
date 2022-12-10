@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:postiliste/dark_theme_styles.dart';
@@ -77,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _getLists() async {
     final prefs = await SharedPreferences.getInstance();
-    Map tmpLists = <DateTime, Map<String, String>>{};
+    var tmpLists = SplayTreeMap<DateTime, Map<String, String>>();
 
     List<String>? activeLists = prefs.getStringList("active");
     _isEmpty = (activeLists == null || activeLists.isEmpty);
@@ -87,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
       DateTime date = onlyDate(actives.last);
       actives.removeLast();
       if (tmpLists.containsKey(date)) {
-        Map<String, String> values = tmpLists[date];
+        Map<String, String> values = tmpLists[date]!;
         values[active] = actives.join(",");
       } else {
         Map<String, String> values = {};
