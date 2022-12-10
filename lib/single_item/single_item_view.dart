@@ -7,9 +7,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class SingleItemViewRoute extends StatefulWidget {
   final String title;
   final String prefKey;
+  final Function() notifyParent;
 
   const SingleItemViewRoute(
-      {super.key, required this.title, required this.prefKey});
+      {super.key,
+      required this.title,
+      required this.prefKey,
+      required this.notifyParent});
 
   @override
   State<SingleItemViewRoute> createState() => _SingleItemView();
@@ -17,6 +21,8 @@ class SingleItemViewRoute extends StatefulWidget {
 
 class _SingleItemView extends State<SingleItemViewRoute> {
   List<String> _list = [];
+
+  bool _allDone = false;
 
   void _getList() async {
     final prefs = await SharedPreferences.getInstance();
@@ -33,8 +39,28 @@ class _SingleItemView extends State<SingleItemViewRoute> {
     setState(() {});
   }
 
+  _setAllDone() {
+    _allDone =
+        (_list.where((title) => !title.contains("_deactivated")).isEmpty &&
+            _list.isNotEmpty);
+  }
+
+  _remove() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> activeLists = prefs.getStringList("active") ?? [];
+    if (activeLists.remove(widget.prefKey)) {
+      prefs.setStringList("active", activeLists);
+      prefs.remove(widget.prefKey);
+      widget.notifyParent();
+      Navigator.pop(context);
+    } else {
+      debugPrint("ERROR: Unable to remove existing list");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    _setAllDone();
     _getList();
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -91,6 +117,11 @@ class _SingleItemView extends State<SingleItemViewRoute> {
                     active: title.contains("_deactivated"),
                     notifyParent: refresh,
                   )),
+          _allDone
+              ? OutlinedButton(
+                  onPressed: () => _remove(),
+                  child: Text("Delete list: ${widget.title}"))
+              : Container(),
           const Padding(padding: EdgeInsets.all(90)),
         ]);
   }
