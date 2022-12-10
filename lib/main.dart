@@ -6,6 +6,7 @@ import 'package:postiliste/dark_theme_styles.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:postiliste/date_item.dart';
+import 'package:postiliste/new_item_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dark_theme_provider.dart';
@@ -139,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
       return Text(
         AppLocalizations.of(context)!.overdue,
         style: Theme.of(context).textTheme.headline4?.copyWith(
-            fontSize: 29,
+            fontSize: 30,
             color: Theme.of(context).errorColor,
             fontWeight: FontWeight.w500),
       );
@@ -178,6 +179,30 @@ class _MyHomePageState extends State<MyHomePage> {
             ));
   }
 
+  _newItemPush() {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => NewItemViewRoute(notifyParent: refresh),
+        transitionDuration: const Duration(milliseconds: 210),
+        reverseTransitionDuration: const Duration(milliseconds: 200),
+        transitionsBuilder: (context, animation, _, child) {
+          const begin = Offset(0.0, 1);
+          const end = Offset.zero;
+          const curve = Curves.easeInOutSine;
+
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     _getLists();
@@ -186,6 +211,12 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        onPressed: () => _newItemPush(),
+        tooltip: 'Add',
+        child: const Icon(Icons.add),
       ),
       body: ListView(
         padding: const EdgeInsets.only(top: 48, left: 15, right: 15),

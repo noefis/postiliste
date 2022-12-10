@@ -131,6 +131,7 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
                                 textEditingController =
                                     fieldTextEditingController;
                                 return TextField(
+                                  readOnly: widget.isFocused,
                                   scrollPadding:
                                       const EdgeInsets.only(bottom: 320),
                                   controller: textEditingController,
