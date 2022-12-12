@@ -52,7 +52,7 @@ class _DateItem<T> extends State<DateItem> {
             ),
             Divider(
                 color: widget.divider
-                    ? Theme.of(context).disabledColor
+                    ? Theme.of(context).shadowColor
                     : Theme.of(context).primaryColor),
           ],
         )
