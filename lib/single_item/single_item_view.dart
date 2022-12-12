@@ -161,13 +161,14 @@ class _SingleItemView extends State<SingleItemViewRoute> {
                     active: title.contains("_deactivated"),
                     notifyParent: refresh,
                   )),
+          const Padding(padding: EdgeInsets.all(12)),
           _allDone
               ? OutlinedButton(
                   onPressed: () => _remove(),
                   child: Text(
                       "${AppLocalizations.of(context)!.deleteList}: ${widget.title}"))
               : Container(),
-          const Padding(padding: EdgeInsets.all(90)),
+          const Padding(padding: EdgeInsets.all(78)),
         ]);
   }
 }
