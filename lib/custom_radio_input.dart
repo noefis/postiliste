@@ -117,9 +117,7 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
                 borderRadius: const BorderRadius.all(Radius.circular(15))),
             child: Row(
               children: [
-                widget.isFocused
-                    ? const Padding(padding: EdgeInsets.all(1))
-                    : _customRadioButton,
+                widget.isFocused ? Container() : _customRadioButton,
                 const SizedBox(width: 12),
                 Expanded(
                     child: LayoutBuilder(
@@ -137,6 +135,10 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
                                   controller: textEditingController,
                                   focusNode: focusNode,
                                   decoration: InputDecoration(
+                                      isDense: widget.isFocused,
+                                      contentPadding: widget.isFocused
+                                          ? const EdgeInsets.all(13.5)
+                                          : null,
                                       hintStyle: TextStyle(
                                           color: widget.isFocused
                                               ? Theme.of(context)
