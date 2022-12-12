@@ -15,5 +15,32 @@
     "@overdue": {},
         
     "done": "Erledigt",
-    "@done": {}
+    "@done": {},
+
+    "cancel": "Abbrechen",
+    "@cancel": {},
+
+    "createNewList": "Eine neue Liste erstellen",
+    "@createNewList": {},
+    
+    "nameNewList": "Name der neuen List",
+    "@nameNewList": {},
+
+    "newList": "Neue Liste",
+    "@newList": {},
+
+    "changeList": "Liste ändern",
+    "@changeList": {},
+
+    "add": "Hinzufügen",
+    "@add": {},
+
+    "deleteList": "Liste löschen",
+    "@deleteList": {},
+
+    "title": "Titel",
+    "@title": {},
+
+    "enterDate": "Datum eingeben",
+    "@enterDate": {}
 }

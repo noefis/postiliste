@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/intl_standalone.dart';
 import 'package:postiliste/dark_theme_styles.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,8 +12,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dark_theme_provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Intl.systemLocale = await findSystemLocale();
   runApp(const MyApp());
 }
 
@@ -163,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Theme.of(context).disabledColor,
               ));
     }
-    return Text(DateFormat('EE, d. MMM.').format(date),
+    return Text(_dateToString(date),
         style: Theme.of(context).textTheme.labelLarge?.copyWith(
               color: Theme.of(context).secondaryHeaderColor,
             ));
@@ -179,10 +181,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Theme.of(context).shadowColor,
               ));
     }
-    return Text(DateFormat('EE, d. MMM.').format(date),
+    return Text(_dateToString(date),
         style: Theme.of(context).textTheme.labelLarge?.copyWith(
               color: Theme.of(context).shadowColor,
             ));
+  }
+
+  _dateToString(date) {
+    return DateFormat('EE, d. MMM.')
+        .format(date)
+        .replaceAll('.,', ',')
+        .replaceAll('..', '.');
   }
 
   _newItemPush() {

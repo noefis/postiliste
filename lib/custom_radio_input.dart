@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:postiliste/date_item.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //ignore: must_be_immutable
@@ -144,9 +144,11 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
                                                   .primary
                                               : Theme.of(context).shadowColor),
                                       hintText: widget.isFocused
-                                          ? "Create a new List"
+                                          ? AppLocalizations.of(context)!
+                                              .createNewList
                                           : _wasFocused
-                                              ? "Name of the new List"
+                                              ? AppLocalizations.of(context)!
+                                                  .nameNewList
                                               : "",
                                       border: InputBorder.none),
                                   onSubmitted: ((value) =>

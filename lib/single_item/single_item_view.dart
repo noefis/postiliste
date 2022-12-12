@@ -164,7 +164,8 @@ class _SingleItemView extends State<SingleItemViewRoute> {
           _allDone
               ? OutlinedButton(
                   onPressed: () => _remove(),
-                  child: Text("Delete list: ${widget.title}"))
+                  child: Text(
+                      "${AppLocalizations.of(context)!.deleteList}: ${widget.title}"))
               : Container(),
           const Padding(padding: EdgeInsets.all(90)),
         ]);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NewItemViewRoute extends StatefulWidget {
   final Function() notifyParent;
@@ -96,19 +97,19 @@ class _NewItemView extends State<NewItemViewRoute> {
             children: [
               TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text(
-                    "Cancel",
-                    style: TextStyle(fontSize: 18),
+                  child: Text(
+                    AppLocalizations.of(context)!.cancel,
+                    style: const TextStyle(fontSize: 18),
                   )),
-              const Text(
-                "New Item",
-                style: TextStyle(fontSize: 18),
+              Text(
+                AppLocalizations.of(context)!.newList,
+                style: const TextStyle(fontSize: 18),
               ),
               TextButton(
                   onPressed: () => _newList(),
-                  child: const Text(
-                    "Add",
-                    style: TextStyle(fontSize: 18),
+                  child: Text(
+                    AppLocalizations.of(context)!.add,
+                    style: const TextStyle(fontSize: 18),
                   )),
             ],
           ),
@@ -138,7 +139,7 @@ class _NewItemView extends State<NewItemViewRoute> {
                       enabledBorder: UnderlineInputBorder(
                           borderSide:
                               BorderSide(color: Theme.of(context).shadowColor)),
-                      hintText: "Title",
+                      hintText: AppLocalizations.of(context)!.title,
                       hintStyle:
                           TextStyle(color: Theme.of(context).shadowColor)),
                   onChanged: ((value) => _input = value),
@@ -209,7 +210,7 @@ class _NewItemView extends State<NewItemViewRoute> {
           controller: dateInput,
           decoration: InputDecoration(
               icon: const Icon(Icons.calendar_today),
-              labelText: "Enter Date",
+              labelText: AppLocalizations.of(context)!.enterDate,
               labelStyle: TextStyle(color: Theme.of(context).shadowColor),
               filled: true,
               fillColor: Theme.of(context).cardColor,

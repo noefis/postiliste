@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChangeItemViewRoute extends StatefulWidget {
   final Function(String, DateTime) notifyParent;
@@ -114,19 +115,19 @@ class _ChangeItemView extends State<ChangeItemViewRoute> {
             children: [
               TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text(
-                    "Cancel",
-                    style: TextStyle(fontSize: 18),
+                  child: Text(
+                    AppLocalizations.of(context)!.cancel,
+                    style: const TextStyle(fontSize: 18),
                   )),
-              const Text(
-                "Change List",
-                style: TextStyle(fontSize: 18),
+              Text(
+                AppLocalizations.of(context)!.changeList,
+                style: const TextStyle(fontSize: 18),
               ),
               TextButton(
                   onPressed: () => _changeList(),
-                  child: const Text(
-                    "Add",
-                    style: TextStyle(fontSize: 18),
+                  child: Text(
+                    AppLocalizations.of(context)!.add,
+                    style: const TextStyle(fontSize: 18),
                   )),
             ],
           ),

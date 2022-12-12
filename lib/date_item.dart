@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'custom_radio.dart';
 import 'custom_radio_input.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DateItem extends StatefulWidget {
   final Text title;
@@ -46,7 +47,8 @@ class _DateItem<T> extends State<DateItem> {
             MyRadioListTileInput(
               notifyParent: refresh,
               dateTime: widget.dateTime,
-              isFocused: widget.isEmpty && widget.title.data == "Today",
+              isFocused: widget.isEmpty &&
+                  widget.title.data == AppLocalizations.of(context)!.today,
             ),
             Divider(
                 color: widget.divider

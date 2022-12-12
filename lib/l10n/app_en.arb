@@ -16,5 +16,32 @@
     "@overdue": {},
         
     "done": "Done",
-    "@done": {}
+    "@done": {},
+
+    "cancel": "Cancel",
+    "@cancel": {},
+
+    "createNewList": "Create a new list",
+    "@createNewList": {},
+
+    "nameNewList": "Name of the new list",
+    "@nameNewList": {},
+
+    "newList": "New List",
+    "@newList": {},
+
+    "changeList": "Change List",
+    "@changeList": {},
+
+    "add": "Add",
+    "@add": {},
+
+    "deleteList": "Delete List",
+    "@deleteList": {},
+
+    "title": "Title",
+    "@title": {},
+
+    "enterDate": "Enter Date",
+    "@enterDate": {}
 }
