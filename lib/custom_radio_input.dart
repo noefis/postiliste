@@ -98,7 +98,7 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
     return InkWell(
       child: AnimatedOpacity(
           duration: const Duration(milliseconds: 250),
-          opacity: _visible ? 1.0 : 0.1,
+          opacity: _visible ? 1.0 : 0.0,
           onEnd: () => {
                 setState(() => {
                       _visible ? null : widget.isFocused = false,
