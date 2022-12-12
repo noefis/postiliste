@@ -50,7 +50,8 @@ class _ChangeItemView extends State<ChangeItemViewRoute> {
   }
 
   Future<void> _changeList() async {
-    if (_input.isNotEmpty) {
+    if (_input.toString() != widget.input.toString() ||
+        _dateTime.toString() != widget.dateTime.toString()) {
       final prefs = await SharedPreferences.getInstance();
       _changeActive(prefs, _input, _dateTime);
       _putAutoCompleteList(prefs, _input);
@@ -113,22 +114,28 @@ class _ChangeItemView extends State<ChangeItemViewRoute> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TextButton(
-                  onPressed: () => Navigator.pop(context),
+              FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(
+                        AppLocalizations.of(context)!.cancel,
+                        style: const TextStyle(fontSize: 18),
+                      ))),
+              FittedBox(
+                  fit: BoxFit.scaleDown,
                   child: Text(
-                    AppLocalizations.of(context)!.cancel,
+                    AppLocalizations.of(context)!.changeList,
                     style: const TextStyle(fontSize: 18),
                   )),
-              Text(
-                AppLocalizations.of(context)!.changeList,
-                style: const TextStyle(fontSize: 18),
-              ),
-              TextButton(
-                  onPressed: () => _changeList(),
-                  child: Text(
-                    AppLocalizations.of(context)!.add,
-                    style: const TextStyle(fontSize: 18),
-                  )),
+              FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: TextButton(
+                      onPressed: () => _changeList(),
+                      child: Text(
+                        AppLocalizations.of(context)!.add,
+                        style: const TextStyle(fontSize: 18),
+                      ))),
             ],
           ),
           const Padding(padding: EdgeInsets.all(10)),

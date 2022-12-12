@@ -95,22 +95,28 @@ class _NewItemView extends State<NewItemViewRoute> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TextButton(
-                  onPressed: () => Navigator.pop(context),
+              FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(
+                        AppLocalizations.of(context)!.cancel,
+                        style: const TextStyle(fontSize: 18),
+                      ))),
+              FittedBox(
+                  fit: BoxFit.scaleDown,
                   child: Text(
-                    AppLocalizations.of(context)!.cancel,
+                    AppLocalizations.of(context)!.newList,
                     style: const TextStyle(fontSize: 18),
                   )),
-              Text(
-                AppLocalizations.of(context)!.newList,
-                style: const TextStyle(fontSize: 18),
-              ),
-              TextButton(
-                  onPressed: () => _newList(),
-                  child: Text(
-                    AppLocalizations.of(context)!.add,
-                    style: const TextStyle(fontSize: 18),
-                  )),
+              FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: TextButton(
+                      onPressed: () => _newList(),
+                      child: Text(
+                        AppLocalizations.of(context)!.add,
+                        style: const TextStyle(fontSize: 18),
+                      ))),
             ],
           ),
           const Padding(padding: EdgeInsets.all(10)),
