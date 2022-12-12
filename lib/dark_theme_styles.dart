@@ -5,7 +5,7 @@ class Styles {
     return ThemeData(
         primarySwatch: Colors.blue,
         primaryColor: const Color.fromARGB(255, 241, 241, 241),
-        backgroundColor: const Color.fromARGB(255, 241, 241, 241),
+        backgroundColor: const Color.fromARGB(0, 241, 241, 241),
         scaffoldBackgroundColor: const Color.fromARGB(255, 241, 241, 241),
         indicatorColor: const Color(0xffCBDCF8),
         hintColor: const Color(0xffEECED3),
@@ -35,7 +35,7 @@ class Styles {
     return ThemeData(
       primarySwatch: Colors.blue,
       primaryColor: Colors.black,
-      backgroundColor: Colors.black,
+      backgroundColor: const Color.fromARGB(0, 0, 0, 0),
       indicatorColor: const Color(0xff0E1D36),
       hintColor: const Color(0xff280C0B),
       highlightColor: const Color(0xff372901),

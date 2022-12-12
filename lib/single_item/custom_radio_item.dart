@@ -88,7 +88,7 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
             border: Border.all(
               color: widget.active
                   ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).primaryColor,
+                  : Theme.of(context).backgroundColor,
               width: 1.5,
             )),
         child: Container(
