@@ -109,7 +109,7 @@ class _ChangeItemView extends State<ChangeItemViewRoute> {
 
   Widget changeItemView(BuildContext context) {
     return ListView(
-        padding: const EdgeInsets.only(top: 30, left: 30, right: 30),
+        padding: const EdgeInsets.only(top: 50, left: 30, right: 30),
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -119,7 +119,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
 
   Widget singleItemView(BuildContext context) {
     return ListView(
-        padding: const EdgeInsets.only(top: 60, left: 20, right: 15),
+        padding: const EdgeInsets.only(top: 75, left: 20, right: 15),
         children: [
           Hero(
               tag: widget.prefKey,
