@@ -10,7 +10,7 @@ import 'dart:io';
 class MyBarcodeScanner {
   bool _barcodeScanInProgress = false;
 
-  Future<String> scanBarcode() async {
+  Future<String?> scanBarcode() async {
     if (_barcodeScanInProgress) {
       return "ERROR: Barcode Scanner is already running";
     }
@@ -25,6 +25,8 @@ class MyBarcodeScanner {
         final String productName = await _getFoodRepoTitle(barcode);
         debugPrint(productName);
         return productName;
+      } else if (result.type.name == "Cancelled") {
+        return null;
       } else {
         debugPrint("NOT A VALID BARCODE:");
         debugPrint(result.rawContent);
