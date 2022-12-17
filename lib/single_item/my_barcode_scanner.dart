@@ -10,9 +10,9 @@ import 'dart:io';
 class MyBarcodeScanner {
   bool _barcodeScanInProgress = false;
 
-  Future<String?> scanBarcode() async {
+  Future<String> scanBarcode() async {
     if (_barcodeScanInProgress) {
-      return null;
+      return "ERROR: Barcode Scanner is already running";
     }
     _barcodeScanInProgress = true;
     try {
@@ -28,17 +28,19 @@ class MyBarcodeScanner {
       } else {
         debugPrint("NOT A VALID BARCODE:");
         debugPrint(result.rawContent);
+        return "ERROR: Couldn't scan barcode correctly";
       }
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.cameraAccessDenied) {
         debugPrint("User denied access to camera");
+        return "ERROR: Not able to access camera";
       } else {
         debugPrint("Error while scanning barcode: $e");
       }
     } finally {
       _barcodeScanInProgress = false;
     }
-    return null;
+    return "ERROR: unexpected error occured";
   }
 
   Future<String> _getFoodRepoTitle(String query) async {
@@ -57,7 +59,7 @@ class MyBarcodeScanner {
       return _getDisplayNameTranslation(searchResults);
     } else {
       _barcodeScanInProgress = false;
-      throw Exception('Failed to search for query: $query');
+      return "ERROR: No product was found for the barcode";
     }
   }
 
@@ -65,9 +67,10 @@ class MyBarcodeScanner {
     final languageCode = Platform.localeName.split('_')[0];
 
     final displayNameTranslations =
-        responseData['data'][0]['display_name_translations'] ?? "Unknown";
+        responseData['data'][0]['display_name_translations'];
     final displayName = displayNameTranslations[languageCode] ??
-        displayNameTranslations.keys.toList()[0];
+        displayNameTranslations.keys.toList()[0] ??
+        "ERROR: Product name not in database";
 
     return displayName;
   }
