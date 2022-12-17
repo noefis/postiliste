@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:postiliste/single_item/change_item_view.dart';
 import 'package:postiliste/single_item/custom_radio_input_item.dart';
 import 'package:postiliste/single_item/custom_radio_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'my_barcode_scanner.dart';
 
 class SingleItemViewRoute extends StatefulWidget {
   String title;
@@ -22,6 +24,7 @@ class SingleItemViewRoute extends StatefulWidget {
 
 class _SingleItemView extends State<SingleItemViewRoute> {
   List<String> _list = [];
+  MyBarcodeScanner myBarcodeScanner = MyBarcodeScanner();
 
   bool _allDone = false;
 
@@ -95,6 +98,44 @@ class _SingleItemView extends State<SingleItemViewRoute> {
     );
   }
 
+  void scanBarcode() async {
+    String? value = await myBarcodeScanner.scanBarcode();
+
+    if (value != null) {
+      _newList(value);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Barcode was not found in the database")));
+    }
+  }
+
+  Future<void> _newList(String value) async {
+    if (value.isNotEmpty) {
+      final prefs = await SharedPreferences.getInstance();
+      _putActive(prefs, value);
+      _putAutoCompleteList(prefs, value);
+    }
+    if (value.isNotEmpty) {
+      setState(() {});
+    }
+  }
+
+  void _putActive(prefs, value) {
+    List<String> activeLists = prefs.getStringList(widget.prefKey) ?? [];
+    String key = '$value,${DateTime.now()}';
+    activeLists.add(key);
+    prefs.setStringList(widget.prefKey, activeLists);
+  }
+
+  void _putAutoCompleteList(prefs, value) {
+    List<String> autoCompleteList =
+        prefs.getStringList("autoCompleteItem") ?? [];
+    if (!autoCompleteList.contains(value)) {
+      autoCompleteList.add(value);
+      prefs.setStringList("autoCompleteItem", autoCompleteList);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _setAllDone();
@@ -112,6 +153,14 @@ class _SingleItemView extends State<SingleItemViewRoute> {
             onPressed: () => _newItemPush(),
           )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        onPressed: scanBarcode,
+        child: const Icon(
+          CupertinoIcons.barcode_viewfinder,
+          size: 35,
+        ),
       ),
       body: singleItemView(context),
     );
