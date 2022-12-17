@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 
-// ...
 class MyBarcodeScanner {
   bool _barcodeScanInProgress = false;
 
@@ -23,7 +22,9 @@ class MyBarcodeScanner {
       if (result.type.name == "Barcode" && isBarcode(result.rawContent)) {
         String barcode = result.rawContent;
         debugPrint("Scanned barcode: $barcode");
-        return _getFoodRepoTitle(barcode);
+        final String productName = await _getFoodRepoTitle(barcode);
+        debugPrint(productName);
+        return productName;
       } else {
         debugPrint("NOT A VALID BARCODE:");
         debugPrint(result.rawContent);
@@ -52,7 +53,6 @@ class MyBarcodeScanner {
 
     if (response.statusCode == 200) {
       final searchResults = json.decode(response.body);
-      debugPrint(_getDisplayNameTranslation(searchResults));
       _barcodeScanInProgress = false;
       return _getDisplayNameTranslation(searchResults);
     } else {
@@ -66,7 +66,6 @@ class MyBarcodeScanner {
 
     final displayNameTranslations =
         responseData['data'][0]['display_name_translations'] ?? "Unknown";
-    debugPrint(displayNameTranslations.toString());
     final displayName = displayNameTranslations[languageCode] ??
         displayNameTranslations.keys.toList()[0];
 
