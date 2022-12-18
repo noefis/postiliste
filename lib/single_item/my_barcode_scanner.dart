@@ -51,13 +51,16 @@ class MyBarcodeScanner {
     };
     var url =
         'https://www.foodrepo.org/api/v3/products?excludes=nutrients&barcodes=$query';
-    final response = await http.get(Uri.parse(url), headers: headers);
-
-    if (response.statusCode == 200) {
-      final searchResults = json.decode(response.body);
-      return _getDisplayNameTranslation(searchResults, context);
-    } else {
-      return AppLocalizations.of(context)!.noProductFound;
+    try {
+      final response = await http.get(Uri.parse(url), headers: headers);
+      if (response.statusCode == 200) {
+        final searchResults = json.decode(response.body);
+        return _getDisplayNameTranslation(searchResults, context);
+      } else {
+        return AppLocalizations.of(context)!.noProductFound;
+      }
+    } catch (e) {
+      return AppLocalizations.of(context)!.networkError;
     }
   }
 

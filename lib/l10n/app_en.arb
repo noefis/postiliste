@@ -21,5 +21,7 @@
     "noProductFound": "ERROR: No product was found for the barcode",
     "notAbleToScan": "ERROR: Not able to scan barcode correctly",
     "cameraDenied": "ERROR: Not able to access camera",
-    "barcodeScannerRunning": "ERROR: Barcode scanner is already running"
+    "barcodeScannerRunning": "ERROR: Barcode scanner is already running",
+    "networkError": "ERROR: Product could not be searched due to network problems"
+
 }
