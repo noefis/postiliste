@@ -109,7 +109,7 @@ class _ChangeItemView extends State<ChangeItemViewRoute> {
 
   Widget changeItemView(BuildContext context) {
     return ListView(
-        padding: const EdgeInsets.only(top: 50, left: 30, right: 30),
+        padding: const EdgeInsets.only(top: 55, left: 15, right: 15),
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,6 +118,10 @@ class _ChangeItemView extends State<ChangeItemViewRoute> {
                   fit: BoxFit.scaleDown,
                   child: TextButton(
                       onPressed: () => Navigator.pop(context),
+                      style: TextButton.styleFrom(
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
                       child: Text(
                         AppLocalizations.of(context)!.cancel,
                         style: const TextStyle(fontSize: 18),
@@ -132,8 +136,12 @@ class _ChangeItemView extends State<ChangeItemViewRoute> {
                   fit: BoxFit.scaleDown,
                   child: TextButton(
                       onPressed: () => _changeList(),
+                      style: TextButton.styleFrom(
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
                       child: Text(
-                        AppLocalizations.of(context)!.add,
+                        AppLocalizations.of(context)!.confirm,
                         style: const TextStyle(fontSize: 18),
                       ))),
             ],
@@ -218,7 +226,9 @@ class _ChangeItemView extends State<ChangeItemViewRoute> {
                   return const Iterable<String>.empty();
                 }
                 return _kOptions.where((String option) {
-                  return option.contains(textEditingValue.text.toLowerCase());
+                  return option
+                      .toLowerCase()
+                      .contains(textEditingValue.text.toLowerCase());
                 });
               },
               onSelected: (String selection) {

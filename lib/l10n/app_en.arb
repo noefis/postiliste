@@ -36,6 +36,9 @@
     "add": "Add",
     "@add": {},
 
+    "confirm": "Confirm",
+    "@confirm": {},
+
     "deleteList": "Delete List",
     "@deleteList": {},
 

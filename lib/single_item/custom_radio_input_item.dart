@@ -153,7 +153,7 @@ class _SingleItemRadioInput<T> extends State<SingleItemRadioInput> {
                               return const Iterable<String>.empty();
                             }
                             return _kOptions.where((String option) {
-                              return option.contains(
+                              return option.toLowerCase().contains(
                                   textEditingValue.text.toLowerCase());
                             });
                           },

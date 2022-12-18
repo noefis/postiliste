@@ -35,6 +35,9 @@
     "add": "Hinzufügen",
     "@add": {},
 
+    "confirm": "Speichern",
+    "@confirm": {},
+
     "deleteList": "Liste löschen",
     "@deleteList": {},
 
