@@ -24,7 +24,6 @@ class SingleItemViewRoute extends StatefulWidget {
 
 class _SingleItemView extends State<SingleItemViewRoute> {
   List<String> _list = [];
-  MyBarcodeScanner myBarcodeScanner = MyBarcodeScanner();
 
   bool _allDone = false;
 
@@ -98,15 +97,38 @@ class _SingleItemView extends State<SingleItemViewRoute> {
     );
   }
 
-  void scanBarcode() async {
-    String? value = await myBarcodeScanner.scanBarcode(context);
+  void _scanBarcode() async {
+    String? barcode = await scanBarcode(context);
+    String? error = null;
 
-    if (value != null && !value.contains("ERROR")) {
-      _newList(value);
-    } else if (value != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(value.replaceFirst("ERROR: ", ""))));
+    if (barcode != null && !barcode.contains("ERROR")) {
+      barcode = _checkBarcodeValidity(barcode);
     }
+    if (barcode == null) {
+    } else if (barcode.contains("ERROR")) {
+      error = barcode;
+    } else {
+      final String productName = await getFoodRepoTitle(barcode, context);
+      if (!productName.contains("ERROR")) {
+        _newList(productName);
+      } else {
+        error = productName;
+      }
+    }
+
+    if (error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error.replaceFirst("ERROR: ", ""))));
+    }
+  }
+
+  String _checkBarcodeValidity(String barcode) {
+    if (barcodeType(barcode) == "invalid") {
+      return AppLocalizations.of(context)!.notAbleToScan;
+    } else if (barcodeType(barcode) == "UPC") {
+      return "ERROR: UPC not supported";
+    }
+    return barcode;
   }
 
   Future<void> _newList(String value) async {
@@ -156,7 +178,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        onPressed: scanBarcode,
+        onPressed: _scanBarcode,
         child: const Icon(
           CupertinoIcons.barcode_viewfinder,
           size: 35,
