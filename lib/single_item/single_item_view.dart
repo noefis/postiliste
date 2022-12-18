@@ -99,13 +99,13 @@ class _SingleItemView extends State<SingleItemViewRoute> {
   }
 
   void scanBarcode() async {
-    String? value = await myBarcodeScanner.scanBarcode();
+    String? value = await myBarcodeScanner.scanBarcode(context);
 
     if (value != null && !value.contains("ERROR")) {
       _newList(value);
     } else if (value != null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(value)));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(value.replaceFirst("ERROR: ", ""))));
     }
   }
 

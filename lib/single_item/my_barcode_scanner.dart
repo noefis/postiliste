@@ -6,46 +6,44 @@ import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyBarcodeScanner {
   bool _barcodeScanInProgress = false;
 
-  Future<String?> scanBarcode() async {
+  Future<String?> scanBarcode(context) async {
+    String? barcode = await _getBarcode(context);
+    _barcodeScanInProgress = false;
+    if (barcode == null || barcode.contains("ERROR")) {
+      return barcode;
+    } else {
+      debugPrint(barcode);
+      final String productName = await _getFoodRepoTitle(barcode, context);
+      return productName;
+    }
+  }
+
+  Future<String?> _getBarcode(context) async {
     if (_barcodeScanInProgress) {
-      return "ERROR: Barcode Scanner is already running";
+      return AppLocalizations.of(context)!.barcodeScannerRunning;
     }
     _barcodeScanInProgress = true;
     try {
-      debugPrint("Starting barcode scan...");
       var result = await BarcodeScanner.scan();
-      debugPrint(result.type.name);
       if (result.type.name == "Barcode" && isBarcode(result.rawContent)) {
-        String barcode = result.rawContent;
-        debugPrint("Scanned barcode: $barcode");
-        final String productName = await _getFoodRepoTitle(barcode);
-        debugPrint(productName);
-        return productName;
+        return result.rawContent;
       } else if (result.type.name == "Cancelled") {
         return null;
-      } else {
-        debugPrint("NOT A VALID BARCODE:");
-        debugPrint(result.rawContent);
-        return "ERROR: Couldn't scan barcode correctly";
       }
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.cameraAccessDenied) {
-        debugPrint("User denied access to camera");
-        return "ERROR: Not able to access camera";
-      } else {
-        debugPrint("Error while scanning barcode: $e");
+        return AppLocalizations.of(context)!.cameraDenied;
       }
-    } finally {
-      _barcodeScanInProgress = false;
     }
-    return "ERROR: unexpected error occured";
+    return AppLocalizations.of(context)!.notAbleToScan;
   }
 
-  Future<String> _getFoodRepoTitle(String query) async {
+  Future<String> _getFoodRepoTitle(String query, context) async {
     var apiKey = '12cf99fc88c83f24eda4367d4a90dbbd';
     var headers = {
       'Accept': 'application/json',
@@ -57,24 +55,27 @@ class MyBarcodeScanner {
 
     if (response.statusCode == 200) {
       final searchResults = json.decode(response.body);
-      _barcodeScanInProgress = false;
-      return _getDisplayNameTranslation(searchResults);
+      return _getDisplayNameTranslation(searchResults, context);
     } else {
-      _barcodeScanInProgress = false;
-      return "ERROR: No product was found for the barcode";
+      return AppLocalizations.of(context)!.noProductFound;
     }
   }
 
-  String _getDisplayNameTranslation(responseData) {
+  String _getDisplayNameTranslation(responseData, context) {
+    debugPrint(responseData.toString());
     final languageCode = Platform.localeName.split('_')[0];
 
-    final displayNameTranslations =
-        responseData['data'][0]['display_name_translations'];
-    final displayName = displayNameTranslations[languageCode] ??
-        displayNameTranslations.keys.toList()[0] ??
-        "ERROR: Product name not in database";
+    final data = responseData['data'];
 
-    return displayName;
+    if (data.isNotEmpty) {
+      final displayNameTranslations = data[0]['display_name_translations'];
+      final displayName = displayNameTranslations[languageCode] ??
+          displayNameTranslations.keys.toList()[0] ??
+          AppLocalizations.of(context)!.productNotInDB;
+      return displayName;
+    }
+
+    return AppLocalizations.of(context)!.productNotInDB;
   }
 }
 

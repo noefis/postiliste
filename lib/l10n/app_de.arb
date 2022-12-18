@@ -3,47 +3,24 @@
     "appName" : "Demo app",
 
     "helloWorld": "Hallo Welt!",
-    "@helloWorld": {},
-
     "today": "Heute",
-    "@today": {},
-
     "tomorrow": "Morgen",
-    "@tomorrow": {},
-    
     "overdue": "Überfällig",
-    "@overdue": {},
-        
     "done": "Erledigt",
-    "@done": {},
-
     "cancel": "Abbrechen",
-    "@cancel": {},
-
     "createNewList": "Eine neue Liste erstellen",
-    "@createNewList": {},
-    
     "nameNewList": "Name der neuen List",
-    "@nameNewList": {},
-
     "newList": "Neue Liste",
-    "@newList": {},
-
     "changeList": "Liste ändern",
-    "@changeList": {},
-
     "add": "Hinzufügen",
-    "@add": {},
-
     "confirm": "Speichern",
-    "@confirm": {},
-
     "deleteList": "Liste löschen",
-    "@deleteList": {},
-
     "title": "Titel",
-    "@title": {},
-
     "enterDate": "Datum eingeben",
-    "@enterDate": {}
+    "productNotInDB": "ERROR: Produkt konnte nicht gefunden werden",
+    "noProductFound": "ERROR: Kein Produkt konnte für den Barcode gefunden werden",
+    "notAbleToScan": "ERROR: Barcode konnte nicht korrekt gescannt werden",
+    "cameraDenied": "ERROR: Kamera konnte nicht geöffnet werden",
+    "barcodeScannerRunning": "ERROR: Barcode-Scanner läuft bereits"
+
 }

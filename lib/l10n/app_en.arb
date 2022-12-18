@@ -2,49 +2,24 @@
     "@@locale" : "en",
     "appName" : "Demo app",
 
-
     "helloWorld": "Hello World!",
-    "@helloWorld": {},
-
     "today": "Today",
-    "@today": {},
-    
     "tomorrow": "Tomorrow",
-    "@tomorrow": {},
-    
     "overdue": "Overdue",
-    "@overdue": {},
-        
     "done": "Done",
-    "@done": {},
-
     "cancel": "Cancel",
-    "@cancel": {},
-
     "createNewList": "Create a new list",
-    "@createNewList": {},
-
     "nameNewList": "Name of the new list",
-    "@nameNewList": {},
-
     "newList": "New List",
-    "@newList": {},
-
     "changeList": "Change List",
-    "@changeList": {},
-
     "add": "Add",
-    "@add": {},
-
     "confirm": "Confirm",
-    "@confirm": {},
-
     "deleteList": "Delete List",
-    "@deleteList": {},
-
     "title": "Title",
-    "@title": {},
-
     "enterDate": "Enter Date",
-    "@enterDate": {}
+    "productNotInDB": "ERROR: Product not in database",
+    "noProductFound": "ERROR: No product was found for the barcode",
+    "notAbleToScan": "ERROR: Not able to scan barcode correctly",
+    "cameraDenied": "ERROR: Not able to access camera",
+    "barcodeScannerRunning": "ERROR: Barcode scanner is already running"
 }
