@@ -123,12 +123,9 @@ class _SingleItemView extends State<SingleItemViewRoute> {
   }
 
   String _checkBarcodeValidity(String barcode) {
-    if (barcodeType(barcode) == "invalid") {
-      return AppLocalizations.of(context)!.notAbleToScan;
-    } else if (barcodeType(barcode) == "UPC") {
-      return "ERROR: UPC not supported";
-    }
-    return barcode;
+    return isBarcode(barcode)
+        ? barcode
+        : AppLocalizations.of(context)!.notAbleToScan;
   }
 
   Future<void> _newList(String value) async {

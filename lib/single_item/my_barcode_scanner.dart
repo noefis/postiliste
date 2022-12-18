@@ -67,14 +67,14 @@ String _getDisplayNameTranslation(responseData, context) {
   return AppLocalizations.of(context)!.productNotInDB;
 }
 
-String barcodeType(String str) {
+bool isBarcode(String str) {
   final eanRegex = RegExp(r'^\d{13}$');
   final upcRegex = RegExp(r'^\d{12}$');
   if (eanRegex.hasMatch(str)) {
-    return "EAN";
+    return true;
   }
   if (upcRegex.hasMatch(str)) {
-    return "UPC";
+    return true;
   }
-  return "invalid";
+  return false;
 }
