@@ -72,6 +72,9 @@ class MyBarcodeScanner {
       final displayName = displayNameTranslations[languageCode] ??
           displayNameTranslations.keys.toList()[0] ??
           AppLocalizations.of(context)!.productNotInDB;
+      if (num.tryParse(displayName) != null) {
+        return AppLocalizations.of(context)!.noProductFound;
+      }
       return displayName;
     }
 
