@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:postiliste/single_item/single_item_view.dart';
 import 'package:postiliste/visual_elements/custom_radio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:expand_tap_area/expand_tap_area.dart';
 
 class MyRadioListTile extends StatefulWidget {
   final String? title;
@@ -110,12 +111,17 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
             }
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            margin: const EdgeInsets.symmetric(vertical: 3),
+            padding: const EdgeInsets.only(left: 4, right: 12),
             child: Row(
               children: [
-                CustomRadio(tapAction: _tapAction, active: _value, bottom: 1),
-                const SizedBox(width: 12),
+                Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 8.5),
+                    child: ExpandTapWidget(
+                        tapPadding: const EdgeInsets.all(10),
+                        onTap: _tapAction,
+                        child: CustomRadio(
+                            tapAction: _tapAction, active: _value, bottom: 1))),
                 Expanded(
                     child: Hero(
                         tag: widget.prefKey,
