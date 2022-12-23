@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:postiliste/single_item/single_item_view.dart';
+import 'package:postiliste/visual_elements/custom_radio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyRadioListTile extends StatefulWidget {
@@ -113,7 +114,7 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
             margin: const EdgeInsets.symmetric(vertical: 3),
             child: Row(
               children: [
-                _customRadioButton,
+                CustomRadio(tapAction: _tapAction, active: _value, bottom: 1),
                 const SizedBox(width: 12),
                 Expanded(
                     child: Hero(
@@ -138,35 +139,5 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
             ),
           ),
         ));
-  }
-
-  Widget get _customRadioButton {
-    return GestureDetector(
-        onTap: () => _tapAction(),
-        child: Container(
-            margin: const EdgeInsets.only(bottom: 1),
-            constraints: const BoxConstraints(
-                maxWidth: 25, maxHeight: 25, minHeight: 25, minWidth: 25),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(400),
-                border: Border.all(
-                  color: _value
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).backgroundColor,
-                  width: 1.5,
-                )),
-            child: Container(
-              padding: EdgeInsets.all(_value ? 8 : 9.5),
-              decoration: BoxDecoration(
-                color: _value ? Theme.of(context).colorScheme.primary : null,
-                borderRadius: BorderRadius.circular(400),
-                border: Border.all(
-                  color: _value
-                      ? Theme.of(context).primaryColor
-                      : Theme.of(context).shadowColor,
-                  width: _value ? 3 : 1.5,
-                ),
-              ),
-            )));
   }
 }

@@ -5,35 +5,27 @@ import 'package:postiliste/visual_elements/date_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class ChangeItemViewRoute extends StatefulWidget {
-  final Function(String, DateTime) notifyParent;
-  final String input;
-  final DateTime dateTime;
+class NewItemViewRoute extends StatefulWidget {
+  final Function() notifyParent;
 
-  const ChangeItemViewRoute(
-      {super.key,
-      required this.notifyParent,
-      required this.input,
-      required this.dateTime});
+  const NewItemViewRoute({super.key, required this.notifyParent});
 
   @override
-  State<ChangeItemViewRoute> createState() => _ChangeItemView();
+  State<NewItemViewRoute> createState() => _NewItemView();
 }
 
-class _ChangeItemView extends State<ChangeItemViewRoute> {
-  var _input = null;
-  var _dateTime = null;
+class _NewItemView extends State<NewItemViewRoute> {
+  String _input = "";
+  DateTime _dateTime = DateTime.now();
   TextEditingController dateInput = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    _input ??= widget.input;
-    _dateTime ??= widget.dateTime;
     _getAutoComplete();
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: null,
-      body: changeItemView(context),
+      body: newItemView(context),
     );
   }
 
@@ -51,34 +43,23 @@ class _ChangeItemView extends State<ChangeItemViewRoute> {
     }
   }
 
-  Future<void> _changeList() async {
-    if (_input.toString() != widget.input.toString() ||
-        _dateTime.toString() != widget.dateTime.toString()) {
+  Future<void> _newList() async {
+    if (_input.isNotEmpty) {
       final prefs = await SharedPreferences.getInstance();
-      _changeActive(prefs, _input, _dateTime);
-      _putAutoCompleteList(prefs, _input);
-      _changeListContent(prefs, _input, _dateTime);
 
-      await widget.notifyParent(_input, _dateTime);
+      _putActive(prefs, _input, _dateTime);
+      _putAutoCompleteList(prefs, _input);
+
+      await widget.notifyParent();
       Navigator.pop(context);
     }
   }
 
-  void _changeActive(prefs, value, date) {
+  void _putActive(prefs, value, date) {
     List<String> activeLists = prefs.getStringList("active") ?? [];
-    String oldKey = '${widget.input},${widget.dateTime}';
     String key = '$value,$date';
-    activeLists.remove(oldKey);
     activeLists.add(key);
     prefs.setStringList("active", activeLists);
-  }
-
-  void _changeListContent(prefs, value, date) {
-    String oldKey = '${widget.input},${widget.dateTime}';
-    String key = '$value,$date';
-    List<String> activeLists = prefs.getStringList(oldKey) ?? [];
-    prefs.setStringList(key, activeLists);
-    prefs.remove(oldKey);
   }
 
   void _putAutoCompleteList(prefs, value) {
@@ -109,7 +90,7 @@ class _ChangeItemView extends State<ChangeItemViewRoute> {
     super.initState();
   }
 
-  Widget changeItemView(BuildContext context) {
+  Widget newItemView(BuildContext context) {
     return ListView(
         padding: const EdgeInsets.only(top: 55, left: 15, right: 15),
         children: [
@@ -131,19 +112,19 @@ class _ChangeItemView extends State<ChangeItemViewRoute> {
               FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
-                    AppLocalizations.of(context)!.changeList,
+                    AppLocalizations.of(context)!.newList,
                     style: const TextStyle(fontSize: 18),
                   )),
               FittedBox(
                   fit: BoxFit.scaleDown,
                   child: TextButton(
-                      onPressed: () => _changeList(),
+                      onPressed: () => _newList(),
                       style: TextButton.styleFrom(
                         minimumSize: Size.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                       child: Text(
-                        AppLocalizations.of(context)!.confirm,
+                        AppLocalizations.of(context)!.add,
                         style: const TextStyle(fontSize: 18),
                       ))),
             ],
@@ -152,10 +133,9 @@ class _ChangeItemView extends State<ChangeItemViewRoute> {
           Container(
             padding: const EdgeInsets.all(10),
             child: AutoComplete(
+              onChange: ((value) => _input = value),
               removeFromAutoCompleteList: _removeFromAutoCompleteList,
               options: _kOptions,
-              onSubmit: (value) => _input = value,
-              onChange: (value) => _input = value,
               inputDecoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(12),
                   filled: true,
@@ -163,7 +143,7 @@ class _ChangeItemView extends State<ChangeItemViewRoute> {
                   enabledBorder: UnderlineInputBorder(
                       borderSide:
                           BorderSide(color: Theme.of(context).shadowColor)),
-                  hintText: widget.input,
+                  hintText: AppLocalizations.of(context)!.title,
                   hintStyle: TextStyle(color: Theme.of(context).shadowColor)),
             ),
           ),

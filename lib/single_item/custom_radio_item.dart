@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:postiliste/visual_elements/custom_radio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SingleItemRadio extends StatefulWidget {
@@ -57,7 +58,8 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
             margin: const EdgeInsets.symmetric(vertical: 3),
             child: Row(
               children: [
-                _customRadioButton,
+                CustomRadio(
+                    tapAction: _tapAction, active: widget.active, bottom: 7),
                 const SizedBox(width: 12),
                 Expanded(
                     child: Container(
@@ -73,34 +75,6 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
                               : Theme.of(context).unselectedWidgetColor)),
                 ))
               ],
-            ),
-          ),
-        ));
-  }
-
-  Widget get _customRadioButton {
-    return Container(
-        margin: const EdgeInsets.only(bottom: 6),
-        constraints: const BoxConstraints(
-            maxWidth: 25, maxHeight: 25, minHeight: 25, minWidth: 25),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(400),
-            border: Border.all(
-              color: widget.active
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).backgroundColor,
-              width: 1.5,
-            )),
-        child: Container(
-          padding: EdgeInsets.all(widget.active ? 8 : 9.5),
-          decoration: BoxDecoration(
-            color: widget.active ? Theme.of(context).colorScheme.primary : null,
-            borderRadius: BorderRadius.circular(400),
-            border: Border.all(
-              color: widget.active
-                  ? Theme.of(context).primaryColor
-                  : Theme.of(context).shadowColor,
-              width: widget.active ? 3 : 1.5,
             ),
           ),
         ));
