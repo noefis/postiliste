@@ -66,6 +66,7 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
       if (activeLists.remove(_toRemoveKey)) {
         prefs.setStringList("active", activeLists);
         prefs.remove(widget.prefKey);
+        prefs.remove("${widget.prefKey}_images");
         widget.notifyParent();
       }
       //in case of error, return radio to initial state

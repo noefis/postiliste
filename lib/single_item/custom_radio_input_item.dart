@@ -79,7 +79,7 @@ class _SingleItemRadioInput<T> extends State<SingleItemRadioInput> {
     _getAutoComplete();
     return InkWell(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 9),
         child: Row(
           children: [
             const InputRadio(),

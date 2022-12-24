@@ -1,10 +1,12 @@
 import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
+import 'package:postiliste/single_item/picture_view.dart';
 import 'package:postiliste/visual_elements/custom_radio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SingleItemRadio extends StatefulWidget {
   final String? title;
+  final String? pictureLink;
   final String prefKey;
   final bool active;
   final Function() notifyParent;
@@ -14,7 +16,8 @@ class SingleItemRadio extends StatefulWidget {
       required this.title,
       required this.prefKey,
       required this.active,
-      required this.notifyParent});
+      required this.notifyParent,
+      this.pictureLink});
 
   @override
   State<SingleItemRadio> createState() => _SingleItemRadio();
@@ -95,6 +98,34 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
     }
   }
 
+  void _showPicture() {
+    if (widget.pictureLink!.isNotEmpty) {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => PictureView(
+            picture: widget.pictureLink!,
+          ),
+          transitionDuration: const Duration(milliseconds: 250),
+          reverseTransitionDuration: const Duration(milliseconds: 200),
+          transitionsBuilder: (context, animation, _, child) {
+            const begin = Offset(1, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOutSine;
+
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+        ),
+      );
+    }
+  }
+
   @override
   void dispose() {
     // Remove the focus node listener
@@ -135,7 +166,7 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
         child: InkWell(
           onTap: () => _tapAction(),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.only(left: 9, right: 5),
             margin: const EdgeInsets.symmetric(vertical: 3),
             child: Row(
               children: [
@@ -183,9 +214,31 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
                                     onFieldSubmitted: (value) =>
                                         _changeTitle(value),
                                   ))),
-                    !widget.active
+                    widget.pictureLink != null
                         ? ExpandTapWidget(
                             tapPadding: const EdgeInsets.all(10),
+                            onTap: () => _showPicture(),
+                            child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 12, bottom: 13, top: 3),
+                                child: SizedBox(
+                                    height: 20.0,
+                                    width: 30.0,
+                                    child: IconButton(
+                                      padding: const EdgeInsets.only(bottom: 6),
+                                      onPressed: () => _showPicture(),
+                                      icon: Icon(
+                                        size: 26,
+                                        Icons.photo_outlined,
+                                        color: Theme.of(context).shadowColor,
+                                      ),
+                                    ))))
+                        : Container(),
+                    Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
+                    !widget.active
+                        ? ExpandTapWidget(
+                            tapPadding: const EdgeInsets.only(
+                                top: 10, bottom: 10, right: 10),
                             onTap: () => setState(() => _edit = !_edit),
                             child: Padding(
                                 padding:

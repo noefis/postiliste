@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:postiliste/single_item/change_item_view.dart';
@@ -24,16 +26,21 @@ class SingleItemViewRoute extends StatefulWidget {
 
 class _SingleItemView extends State<SingleItemViewRoute> {
   List<String> _list = [];
+  Map<String, String> _images = {};
 
   bool _allDone = false;
 
   void _getList() async {
     final prefs = await SharedPreferences.getInstance();
     List<String> activeList = prefs.getStringList(widget.prefKey) ?? [];
+    String jsonStr = prefs.getString("${widget.prefKey}_images") ?? "{}";
+
+    Map<String, String> images = jsonDecode(jsonStr).cast<String, String>();
 
     if (activeList.toString() != _list.toString()) {
       setState(() {
         _list = activeList;
+        _images = images;
       });
     }
   }
@@ -63,6 +70,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
     if (activeLists.remove(widget.prefKey)) {
       prefs.setStringList("active", activeLists);
       prefs.remove(widget.prefKey);
+      prefs.remove("${widget.prefKey}_images");
       widget.notifyParent();
       Navigator.pop(context);
     } else {
@@ -108,9 +116,11 @@ class _SingleItemView extends State<SingleItemViewRoute> {
     } else if (barcode.contains("ERROR")) {
       error = barcode;
     } else {
-      final String productName = await getFoodRepoTitle(barcode, context);
+      final List<String> item = await getFoodRepoItem(barcode, context);
+      final String productName = item.first;
+      final String image = item.last;
       if (!productName.contains("ERROR")) {
-        _newList(productName);
+        _newList(productName, image);
       } else {
         error = productName;
       }
@@ -128,20 +138,34 @@ class _SingleItemView extends State<SingleItemViewRoute> {
         : AppLocalizations.of(context)!.notAbleToScan;
   }
 
-  Future<void> _newList(String value) async {
+  Future<void> _newList(String value, String image) async {
     if (value.isNotEmpty) {
+      String key = '$value,${DateTime.now()}';
+
       final prefs = await SharedPreferences.getInstance();
-      _putActive(prefs, value);
+      _putActive(prefs, value, key);
+      _putImage(image, key);
       _putAutoCompleteList(prefs, value);
-    }
-    if (value.isNotEmpty) {
+
       setState(() {});
     }
   }
 
-  void _putActive(prefs, value) {
+  _putImage(String image, String key) async {
+    if (image.isNotEmpty) {
+      final prefs = await SharedPreferences.getInstance();
+      String jsonStr = prefs.getString("${widget.prefKey}_images") ?? "{}";
+
+      Map<String, String> images = jsonDecode(jsonStr).cast<String, String>();
+      images[key] = image;
+
+      String newJsonString = jsonEncode(images);
+      prefs.setString("${widget.prefKey}_images", newJsonString);
+    }
+  }
+
+  void _putActive(prefs, value, key) {
     List<String> activeLists = prefs.getStringList(widget.prefKey) ?? [];
-    String key = '$value,${DateTime.now()}';
     activeLists.add(key);
     prefs.setStringList(widget.prefKey, activeLists);
   }
@@ -208,6 +232,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
                 (title) => SingleItemRadio(
                   title: title,
                   prefKey: widget.prefKey,
+                  pictureLink: _images[title],
                   active: title.contains("_deactivated"),
                   notifyParent: refresh,
                 ),
@@ -227,6 +252,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
               .map((title) => SingleItemRadio(
                     title: title,
                     prefKey: widget.prefKey,
+                    pictureLink: _images[title.replaceAll("_deactivated", "")],
                     active: title.contains("_deactivated"),
                     notifyParent: refresh,
                   )),

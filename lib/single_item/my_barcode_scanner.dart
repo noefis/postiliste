@@ -24,7 +24,7 @@ Future<String?> scanBarcode(context) async {
   return AppLocalizations.of(context)!.notAbleToScan;
 }
 
-Future<String> getFoodRepoTitle(String query, context) async {
+Future<List<String>> getFoodRepoItem(String query, context) async {
   var apiKey = '12cf99fc88c83f24eda4367d4a90dbbd';
   var headers = {
     'Accept': 'application/json',
@@ -40,31 +40,35 @@ Future<String> getFoodRepoTitle(String query, context) async {
       final searchResults = json.decode(response.body);
       return _getDisplayNameTranslation(searchResults, context);
     } else {
-      return AppLocalizations.of(context)!.noProductFound;
+      return [AppLocalizations.of(context)!.noProductFound];
     }
   } catch (e) {
-    return AppLocalizations.of(context)!.networkError;
+    return [AppLocalizations.of(context)!.networkError];
   }
 }
 
-String _getDisplayNameTranslation(responseData, context) {
+List<String> _getDisplayNameTranslation(responseData, context) {
   debugPrint(responseData.toString());
   final languageCode = Platform.localeName.split('_')[0];
+  String pic = "";
 
   final data = responseData['data'];
 
   if (data.isNotEmpty) {
+    if (data[0]['images'].isNotEmpty) {
+      pic = data[0]['images'][0]['large'];
+    }
     final displayNameTranslations = data[0]['display_name_translations'];
     final displayName = displayNameTranslations[languageCode] ??
         displayNameTranslations.keys.toList()[0] ??
         AppLocalizations.of(context)!.productNotInDB;
     if (num.tryParse(displayName) != null) {
-      return AppLocalizations.of(context)!.noProductFound;
+      return [AppLocalizations.of(context)!.noProductFound];
     }
-    return displayName;
+    return [displayName, pic];
   }
 
-  return AppLocalizations.of(context)!.productNotInDB;
+  return [AppLocalizations.of(context)!.productNotInDB];
 }
 
 bool isBarcode(String str) {
