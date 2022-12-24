@@ -1,3 +1,4 @@
+import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
 import 'package:postiliste/visual_elements/custom_radio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,9 +23,13 @@ class SingleItemRadio extends StatefulWidget {
 class _SingleItemRadio<T> extends State<SingleItemRadio> {
   String _key = "";
   String _title = "";
+  String _last = "";
+  bool _edit = false;
+  final FocusNode _focusNode = FocusNode();
+  late TextEditingController _textFormFieldController;
 
   void _tapAction() async {
-    if (mounted) {
+    if (mounted && !_edit) {
       final prefs = await SharedPreferences.getInstance();
       List<String> activeList = prefs.getStringList(widget.prefKey) ?? [];
       if (activeList.remove(widget.title)) {
@@ -40,14 +45,79 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
     }
   }
 
+  void _changeTitle(String val) async {
+    bool canEdit = mounted &&
+        _edit &&
+        !widget.active &&
+        val.replaceAll(" ", "").isNotEmpty &&
+        val != _title;
+
+    debugPrint("Can edit? $canEdit");
+
+    if (canEdit) {
+      final prefs = await SharedPreferences.getInstance();
+      List<String> activeList = prefs.getStringList(widget.prefKey) ?? [];
+
+      int index = activeList.indexOf(widget.title!);
+      if (index >= 0) {
+        activeList[index] = "$val,$_last";
+        prefs.setStringList(widget.prefKey, activeList);
+        _putAutoCompleteList(prefs, val);
+        _edit = false;
+        FocusScope.of(context).unfocus();
+        widget.notifyParent();
+      }
+    } else {
+      FocusScope.of(context).unfocus();
+      setState(() {
+        _edit = false;
+      });
+    }
+  }
+
+  void _putAutoCompleteList(prefs, value) {
+    List<String> autoCompleteList =
+        prefs.getStringList("autoCompleteItem") ?? [];
+    if (!autoCompleteList.contains(value)) {
+      autoCompleteList.add(value);
+      prefs.setStringList("autoCompleteItem", autoCompleteList);
+    }
+  }
+
+  @override
+  void dispose() {
+    // Remove the focus node listener
+    _focusNode.removeListener(() {
+      if (!_focusNode.hasFocus) {
+        _changeTitle(_textFormFieldController.text);
+      }
+    });
+
+    // Dispose of the focus node
+    _focusNode.dispose();
+
+    // Dispose of the text editing controller
+    _textFormFieldController.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     _key = widget.active
         ? widget.title!.replaceAll('_deactivated', '')
         : widget.title!.replaceAll('_deactivated', '');
     List<String> tmp = _key.split(',');
-    tmp.removeLast();
+    _last = tmp.removeLast();
     _title = tmp.join(",");
+    _textFormFieldController = TextEditingController(text: _title);
+
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) {
+        // The keyboard has been closed
+        _changeTitle(_textFormFieldController.text);
+      }
+    });
 
     return Opacity(
         opacity: widget.active ? 0.6 : 1.0,
@@ -63,17 +133,72 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
                 const SizedBox(width: 12),
                 Expanded(
                     child: Container(
-                  padding: const EdgeInsets.only(bottom: 13, top: 7),
                   decoration: BoxDecoration(
                       border: Border(
-                          bottom:
-                              BorderSide(color: Theme.of(context).hoverColor))),
-                  child: Text(_title,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: widget.active
-                              ? Theme.of(context).disabledColor
-                              : Theme.of(context).unselectedWidgetColor)),
-                ))
+                          bottom: BorderSide(
+                              width: _edit ? 1.7 : 1,
+                              color: _edit
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context).hoverColor))),
+                  child: Row(children: [
+                    Expanded(
+                        child: Padding(
+                            padding: !_edit
+                                ? const EdgeInsets.only(bottom: 13, top: 7)
+                                : const EdgeInsets.all(0),
+                            child: !_edit
+                                ? Text(_title,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                            color: widget.active
+                                                ? Theme.of(context)
+                                                    .disabledColor
+                                                : Theme.of(context)
+                                                    .unselectedWidgetColor))
+                                : TextFormField(
+                                    controller: _textFormFieldController,
+                                    decoration: const InputDecoration(
+                                        contentPadding:
+                                            EdgeInsets.symmetric(vertical: 0),
+                                        border: InputBorder.none),
+                                    style: TextStyle(fontSize: 14),
+                                    focusNode: _focusNode,
+                                    onEditingComplete: () => _changeTitle(
+                                        _textFormFieldController.text),
+                                    onSaved: (value) =>
+                                        _changeTitle(value!.toString()),
+                                    onFieldSubmitted: (value) =>
+                                        _changeTitle(value),
+                                  ))),
+                    !widget.active
+                        ? ExpandTapWidget(
+                            tapPadding: const EdgeInsets.all(10),
+                            onTap: () => setState(() => _edit = !_edit),
+                            child: Padding(
+                                padding:
+                                    const EdgeInsets.only(bottom: 13, top: 7),
+                                child: SizedBox(
+                                    height: 20.0,
+                                    width: 45.0,
+                                    child: IconButton(
+                                      padding: const EdgeInsets.only(bottom: 6),
+                                      onPressed: () => setState(() {
+                                        _edit = !_edit;
+                                        if (_edit) {
+                                          FocusScope.of(context)
+                                              .requestFocus(_focusNode);
+                                        }
+                                      }),
+                                      icon: Icon(
+                                        Icons.edit,
+                                        color: Theme.of(context).disabledColor,
+                                      ),
+                                    ))))
+                        : Container()
+                  ]),
+                )),
               ],
             ),
           ),

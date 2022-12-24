@@ -52,8 +52,9 @@ class _ChangeItemView extends State<ChangeItemViewRoute> {
   }
 
   Future<void> _changeList() async {
-    if (_input.toString() != widget.input.toString() ||
-        _dateTime.toString() != widget.dateTime.toString()) {
+    if ((_input.toString() != widget.input.toString() ||
+            _dateTime.toString() != widget.dateTime.toString()) &&
+        _input.replaceAll(" ", "").isNotEmpty) {
       final prefs = await SharedPreferences.getInstance();
       _changeActive(prefs, _input, _dateTime);
       _putAutoCompleteList(prefs, _input);

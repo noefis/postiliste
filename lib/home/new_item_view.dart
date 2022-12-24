@@ -44,7 +44,7 @@ class _NewItemView extends State<NewItemViewRoute> {
   }
 
   Future<void> _newList() async {
-    if (_input.isNotEmpty) {
+    if (_input.replaceAll(" ", "").isNotEmpty) {
       final prefs = await SharedPreferences.getInstance();
 
       _putActive(prefs, _input, _dateTime);

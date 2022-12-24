@@ -159,6 +159,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
   Widget build(BuildContext context) {
     _setAllDone();
     _getList();
+    debugPrint(_list.toString());
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(

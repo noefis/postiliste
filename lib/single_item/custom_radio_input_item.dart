@@ -31,7 +31,7 @@ class _SingleItemRadioInput<T> extends State<SingleItemRadioInput> {
 
   Future<void> _newList(
       String value, TextEditingController textEditingController) async {
-    if (value.isNotEmpty) {
+    if (value.replaceAll(" ", "").isNotEmpty) {
       final prefs = await SharedPreferences.getInstance();
       _putActive(prefs, value);
       _putAutoCompleteList(prefs, value);
