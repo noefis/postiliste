@@ -84,6 +84,17 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
     }
   }
 
+  void _delete() async {
+    debugPrint("remove!");
+    if (mounted) {
+      final prefs = await SharedPreferences.getInstance();
+      List<String> activeList = prefs.getStringList(widget.prefKey) ?? [];
+      activeList.remove(widget.title);
+      prefs.setStringList(widget.prefKey, activeList);
+      widget.notifyParent();
+    }
+  }
+
   @override
   void dispose() {
     // Remove the focus node listener
@@ -196,7 +207,24 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
                                         color: Theme.of(context).disabledColor,
                                       ),
                                     ))))
-                        : Container()
+                        : ExpandTapWidget(
+                            tapPadding: const EdgeInsets.all(8),
+                            onTap: () => _delete(),
+                            child: Padding(
+                                padding:
+                                    const EdgeInsets.only(bottom: 13, top: 7),
+                                child: SizedBox(
+                                    height: 20.0,
+                                    width: 45.0,
+                                    child: IconButton(
+                                      padding: const EdgeInsets.only(bottom: 6),
+                                      onPressed: () => _delete(),
+                                      icon: Icon(
+                                        Icons.remove_circle_outline,
+                                        color: Theme.of(context)
+                                            .unselectedWidgetColor,
+                                      ),
+                                    ))))
                   ]),
                 )),
               ],
