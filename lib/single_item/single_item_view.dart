@@ -37,7 +37,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
     List<String> activeList = prefs.getStringList(widget.prefKey) ?? [''];
     String jsonStr = prefs.getString("${widget.prefKey}_images") ?? "{'':['']}";
 
-    Map<String, List<String>> images = castToStringMap(jsonDecode(jsonStr));
+    Map<String, List<String>> images = _castToStringMap(jsonDecode(jsonStr));
 
     if (activeList.toString() != _list.toString()) {
       setState(() {
@@ -47,7 +47,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
     }
   }
 
-  Map<String, List<String>> castToStringMap(Map<String, dynamic> input) {
+  Map<String, List<String>> _castToStringMap(Map<String, dynamic> input) {
     Map<String, List<String>> output = {};
     input.forEach((key, value) {
       List<String> list =
@@ -168,8 +168,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
       final prefs = await SharedPreferences.getInstance();
       String jsonStr = prefs.getString("${widget.prefKey}_images") ?? "{}";
 
-      Map<String, List<String>> images =
-          jsonDecode(jsonStr).cast<String, List<String>>();
+      Map<String, List<String>> images = _castToStringMap(jsonDecode(jsonStr));
       images[key] = productImages;
 
       String newJsonString = jsonEncode(images);

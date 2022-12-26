@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
 import 'package:postiliste/single_item/picture_view.dart';
@@ -66,6 +68,7 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
         activeList[index] = "$val,$_last";
         prefs.setStringList(widget.prefKey, activeList);
         _putAutoCompleteList(prefs, val);
+        _changeImageReference(prefs, "$val,$_last");
         _edit = false;
         FocusScope.of(context).unfocus();
         widget.notifyParent();
@@ -76,6 +79,28 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
         _edit = false;
       });
     }
+  }
+
+  _changeImageReference(prefs, newKey) {
+    String jsonStr = prefs.getString("${widget.prefKey}_images") ?? "{}";
+    Map<String, List<String>> images = _castToStringMap(jsonDecode(jsonStr));
+
+    List<String>? productImages = images.remove(widget.title);
+    if (productImages != null) {
+      images[newKey] = productImages;
+      String newJsonString = jsonEncode(images);
+      prefs.setString("${widget.prefKey}_images", newJsonString);
+    }
+  }
+
+  Map<String, List<String>> _castToStringMap(Map<String, dynamic> input) {
+    Map<String, List<String>> output = {};
+    input.forEach((key, value) {
+      List<String> list =
+          (value as List).map((item) => item as String).toList();
+      output[key] = list;
+    });
+    return output;
   }
 
   void _putAutoCompleteList(prefs, value) {
