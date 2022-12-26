@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class AutoComplete extends StatelessWidget {
@@ -39,7 +41,7 @@ class AutoComplete extends StatelessWidget {
                             BorderRadius.vertical(bottom: Radius.circular(4.0)),
                       ),
                       child: SizedBox(
-                        height: 60.0 * options.length,
+                        height: min(60.0 * options.length, 365),
                         width: constraints.biggest.width,
                         child: ListView.separated(
                           padding: EdgeInsets.zero,

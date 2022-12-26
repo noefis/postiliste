@@ -255,7 +255,9 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
                                       icon: Icon(
                                         size: 26,
                                         Icons.photo_outlined,
-                                        color: Theme.of(context).shadowColor,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
                                     ))))
                         : Container(),

@@ -25,17 +25,15 @@ class SingleItemViewRoute extends StatefulWidget {
 }
 
 class _SingleItemView extends State<SingleItemViewRoute> {
-  List<String> _list = [''];
-  Map<String, List<String>> _images = {
-    '': ['']
-  };
+  List<String> _list = [];
+  Map<String, List<String>> _images = {};
 
   bool _allDone = false;
 
   void _getList() async {
     final prefs = await SharedPreferences.getInstance();
     List<String> activeList = prefs.getStringList(widget.prefKey) ?? [''];
-    String jsonStr = prefs.getString("${widget.prefKey}_images") ?? "{'':['']}";
+    String jsonStr = prefs.getString("${widget.prefKey}_images") ?? "{}";
 
     Map<String, List<String>> images = _castToStringMap(jsonDecode(jsonStr));
 
