@@ -25,17 +25,19 @@ class SingleItemViewRoute extends StatefulWidget {
 }
 
 class _SingleItemView extends State<SingleItemViewRoute> {
-  List<String> _list = [];
-  Map<String, String> _images = {};
+  List<String> _list = [''];
+  Map<String, List<String>> _images = {
+    '': ['']
+  };
 
   bool _allDone = false;
 
   void _getList() async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> activeList = prefs.getStringList(widget.prefKey) ?? [];
-    String jsonStr = prefs.getString("${widget.prefKey}_images") ?? "{}";
+    List<String> activeList = prefs.getStringList(widget.prefKey) ?? [''];
+    String jsonStr = prefs.getString("${widget.prefKey}_images") ?? "{'':['']}";
 
-    Map<String, String> images = jsonDecode(jsonStr).cast<String, String>();
+    Map<String, List<String>> images = castToStringMap(jsonDecode(jsonStr));
 
     if (activeList.toString() != _list.toString()) {
       setState(() {
@@ -43,6 +45,16 @@ class _SingleItemView extends State<SingleItemViewRoute> {
         _images = images;
       });
     }
+  }
+
+  Map<String, List<String>> castToStringMap(Map<String, dynamic> input) {
+    Map<String, List<String>> output = {};
+    input.forEach((key, value) {
+      List<String> list =
+          (value as List).map((item) => item as String).toList();
+      output[key] = list;
+    });
+    return output;
   }
 
   refresh() {
@@ -117,10 +129,10 @@ class _SingleItemView extends State<SingleItemViewRoute> {
       error = barcode;
     } else {
       final List<String> item = await getFoodRepoItem(barcode, context);
-      final String productName = item.first;
-      final String image = item.last;
+      final String productName = item.removeAt(0);
+      final List<String> images = item;
       if (!productName.contains("ERROR")) {
-        _newList(productName, image);
+        _newList(productName, images);
       } else {
         error = productName;
       }
@@ -138,26 +150,27 @@ class _SingleItemView extends State<SingleItemViewRoute> {
         : AppLocalizations.of(context)!.notAbleToScan;
   }
 
-  Future<void> _newList(String value, String image) async {
+  Future<void> _newList(String value, List<String> images) async {
     if (value.isNotEmpty) {
       String key = '$value,${DateTime.now()}';
 
       final prefs = await SharedPreferences.getInstance();
       _putActive(prefs, value, key);
-      _putImage(image, key);
+      _putImage(images, key);
       _putAutoCompleteList(prefs, value);
 
       setState(() {});
     }
   }
 
-  _putImage(String image, String key) async {
-    if (image.isNotEmpty) {
+  _putImage(List<String> productImages, String key) async {
+    if (productImages.isNotEmpty) {
       final prefs = await SharedPreferences.getInstance();
       String jsonStr = prefs.getString("${widget.prefKey}_images") ?? "{}";
 
-      Map<String, String> images = jsonDecode(jsonStr).cast<String, String>();
-      images[key] = image;
+      Map<String, List<String>> images =
+          jsonDecode(jsonStr).cast<String, List<String>>();
+      images[key] = productImages;
 
       String newJsonString = jsonEncode(images);
       prefs.setString("${widget.prefKey}_images", newJsonString);
@@ -184,6 +197,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
     _setAllDone();
     _getList();
     debugPrint(_list.toString());
+    debugPrint(_images.toString());
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -232,7 +246,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
                 (title) => SingleItemRadio(
                   title: title,
                   prefKey: widget.prefKey,
-                  pictureLink: _images[title],
+                  picturesLink: _images[title]?.whereType<String>().toList(),
                   active: title.contains("_deactivated"),
                   notifyParent: refresh,
                 ),
@@ -252,7 +266,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
               .map((title) => SingleItemRadio(
                     title: title,
                     prefKey: widget.prefKey,
-                    pictureLink: _images[title.replaceAll("_deactivated", "")],
+                    picturesLink: _images[title.replaceAll("_deactivated", "")],
                     active: title.contains("_deactivated"),
                     notifyParent: refresh,
                   )),

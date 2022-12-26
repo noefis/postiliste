@@ -50,13 +50,13 @@ Future<List<String>> getFoodRepoItem(String query, context) async {
 List<String> _getDisplayNameTranslation(responseData, context) {
   debugPrint(responseData.toString());
   final languageCode = Platform.localeName.split('_')[0];
-  String pic = "";
+  List<String> largeImages = [];
 
   final data = responseData['data'];
 
   if (data.isNotEmpty) {
     if (data[0]['images'].isNotEmpty) {
-      pic = data[0]['images'][0]['large'];
+      largeImages = [for (var pic in data[0]['images']) pic['large']];
     }
     final displayNameTranslations = data[0]['display_name_translations'];
     final displayName = displayNameTranslations[languageCode] ??
@@ -65,7 +65,7 @@ List<String> _getDisplayNameTranslation(responseData, context) {
     if (num.tryParse(displayName) != null) {
       return [AppLocalizations.of(context)!.noProductFound];
     }
-    return [displayName, pic];
+    return [displayName, ...largeImages];
   }
 
   return [AppLocalizations.of(context)!.productNotInDB];

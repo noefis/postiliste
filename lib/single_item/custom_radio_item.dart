@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SingleItemRadio extends StatefulWidget {
   final String? title;
-  final String? pictureLink;
+  final List<String>? picturesLink;
   final String prefKey;
   final bool active;
   final Function() notifyParent;
@@ -17,7 +17,7 @@ class SingleItemRadio extends StatefulWidget {
       required this.prefKey,
       required this.active,
       required this.notifyParent,
-      this.pictureLink});
+      this.picturesLink});
 
   @override
   State<SingleItemRadio> createState() => _SingleItemRadio();
@@ -99,12 +99,12 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
   }
 
   void _showPicture() {
-    if (widget.pictureLink!.isNotEmpty) {
+    if (widget.picturesLink!.isNotEmpty) {
       Navigator.push(
         context,
         PageRouteBuilder(
           pageBuilder: (_, __, ___) => PictureView(
-            picture: widget.pictureLink!,
+            pictures: widget.picturesLink!,
           ),
           transitionDuration: const Duration(milliseconds: 250),
           reverseTransitionDuration: const Duration(milliseconds: 200),
@@ -214,7 +214,7 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
                                     onFieldSubmitted: (value) =>
                                         _changeTitle(value),
                                   ))),
-                    widget.pictureLink != null
+                    widget.picturesLink != null
                         ? ExpandTapWidget(
                             tapPadding: const EdgeInsets.all(10),
                             onTap: () => _showPicture(),
