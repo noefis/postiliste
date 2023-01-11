@@ -5,8 +5,8 @@ class Styles {
     return ThemeData(
         primarySwatch: Colors.blue,
         primaryColor: const Color.fromARGB(255, 241, 241, 241),
-        backgroundColor: const Color.fromARGB(0, 241, 241, 241),
-        scaffoldBackgroundColor: const Color.fromARGB(255, 241, 241, 241),
+        backgroundColor: const Color.fromARGB(0, 255, 255, 255),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
         indicatorColor: const Color(0xffCBDCF8),
         hintColor: const Color(0xffEECED3),
         highlightColor: const Color(0xffFCE192),

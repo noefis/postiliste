@@ -203,7 +203,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
         backgroundColor: Colors.transparent,
         actions: [
           IconButton(
-            icon: const Icon(Icons.info_outline),
+            icon: const Icon(Icons.info_outline, size: 28),
             tooltip: 'Show list info',
             onPressed: () => _newItemPush(),
           )

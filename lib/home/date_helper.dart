@@ -69,14 +69,14 @@ Text date(DateTime date, context) {
       style: Theme.of(context).textTheme.headline4?.copyWith(
           fontSize: 30,
           color: Theme.of(context).errorColor,
-          fontWeight: FontWeight.w500),
+          fontWeight: FontWeight.w700),
     );
   } else if (date == today) {
     return Text(
       AppLocalizations.of(context)!.today,
       style: Theme.of(context).textTheme.headline4?.copyWith(
           color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.w500),
+          fontWeight: FontWeight.w600),
     );
   } else if (date == tomorrow) {
     return Text(AppLocalizations.of(context)!.tomorrow,
