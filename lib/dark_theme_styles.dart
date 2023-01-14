@@ -4,7 +4,7 @@ class Styles {
   static ThemeData themeDataLight(BuildContext context) {
     return ThemeData(
         primarySwatch: Colors.blue,
-        primaryColor: const Color.fromARGB(255, 241, 241, 241),
+        primaryColor: const Color.fromARGB(255, 255, 255, 255),
         backgroundColor: const Color.fromARGB(0, 255, 255, 255),
         scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
         indicatorColor: const Color(0xffCBDCF8),

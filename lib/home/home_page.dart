@@ -93,6 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           ..._lists.keys.map((key) => DateItem(
                 dateTime: key,
+                first: _lists.keys.elementAt(0) == key,
                 title: date(key, context),
                 radios: _lists[key],
                 notifyParent: refresh,

@@ -9,13 +9,15 @@ import 'package:expand_tap_area/expand_tap_area.dart';
 class MyRadioListTile extends StatefulWidget {
   final String? title;
   final String prefKey;
+  final bool first;
   final Function() notifyParent;
 
   const MyRadioListTile(
       {super.key,
       required this.title,
       required this.prefKey,
-      required this.notifyParent});
+      required this.notifyParent,
+      this.first = false});
 
   @override
   State<MyRadioListTile> createState() => _MyRadioListTile();
@@ -132,16 +134,24 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
                               border: Border(
                                   bottom: BorderSide(
                                       color: Theme.of(context).hoverColor))),
-                          child: Text(widget.title!,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                      color: _value
-                                          ? Theme.of(context).disabledColor
-                                          : Theme.of(context)
-                                              .unselectedWidgetColor)),
-                        )))
+                          child: Row(children: [
+                            Expanded(
+                                child: Text(widget.title!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                            color: _value
+                                                ? Theme.of(context)
+                                                    .disabledColor
+                                                : Theme.of(context)
+                                                    .unselectedWidgetColor))),
+                            widget.first
+                                ? Icon(Icons.navigate_next,
+                                    color: Theme.of(context).shadowColor)
+                                : Container()
+                          ]),
+                        ))),
               ],
             ),
           ),
