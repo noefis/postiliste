@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Posti-Liste',
       theme: Styles.themeDataLight(context),
       darkTheme: Styles.themeDataDark(context),
       localizationsDelegates: const [
@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
         Locale('en', ''), // English, no country code
         Locale('de', ''), // German, no country code
       ],
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Posti-Liste'),
     );
   }
 }

@@ -22,6 +22,8 @@
     "notAbleToScan": "ERROR: Barcode konnte nicht korrekt gescannt werden",
     "cameraDenied": "ERROR: Kamera konnte nicht geöffnet werden",
     "barcodeScannerRunning": "ERROR: Barcode-Scanner läuft bereits",
-    "networkError": "ERROR: Produkt kann aufgrund von Netzwerkproblemen nicht gesucht werden"
+    "networkError": "ERROR: Produkt kann aufgrund von Netzwerkproblemen nicht gesucht werden",
+    "feedbackTitle": "Dein Feedback ist wichtig!",
+    "feedbackMessage": "Tippe auf einen Stern, um Posti-Liste zu bewerten. Wir würden uns freuen."
 
 }

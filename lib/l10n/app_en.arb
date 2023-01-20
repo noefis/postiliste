@@ -22,6 +22,8 @@
     "notAbleToScan": "ERROR: Not able to scan barcode correctly",
     "cameraDenied": "ERROR: Not able to access camera",
     "barcodeScannerRunning": "ERROR: Barcode scanner is already running",
-    "networkError": "ERROR: Product could not be searched due to network problems"
+    "networkError": "ERROR: Product could not be searched due to network problems",
+    "feedbackTitle": "Your feedback is important!",
+    "feedbackMessage": "Tap on a star to rate Posti-Liste, \n  we would appreciate it."
 
 }

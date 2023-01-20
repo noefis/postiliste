@@ -114,7 +114,7 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
             }
           },
           child: Container(
-            padding: const EdgeInsets.only(left: 4, right: 12),
+            padding: const EdgeInsets.only(left: 0),
             child: Row(
               children: [
                 Padding(

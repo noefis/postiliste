@@ -8,6 +8,7 @@ import 'package:postiliste/single_item/custom_radio_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'my_barcode_scanner.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 
 class SingleItemViewRoute extends StatefulWidget {
   String title;
@@ -75,6 +76,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
   }
 
   _remove() async {
+    await initRateMyApp();
     final prefs = await SharedPreferences.getInstance();
     List<String> activeLists = prefs.getStringList("active") ?? [];
     if (activeLists.remove(widget.prefKey)) {
@@ -187,6 +189,56 @@ class _SingleItemView extends State<SingleItemViewRoute> {
       autoCompleteList.add(value);
       prefs.setStringList("autoCompleteItem", autoCompleteList);
     }
+  }
+
+  final RateMyApp _rateMyApp = RateMyApp(
+    preferencesPrefix: 'rateMyApp_',
+    minDays: 3,
+    minLaunches: 7,
+    remindDays: 2,
+    remindLaunches: 5,
+    appStoreIdentifier: 'ch.noel.postiliste',
+    googlePlayIdentifier: 'ch.noel.postiliste',
+  );
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  initRateMyApp() {
+    _rateMyApp.init().then((_) {
+      if (_rateMyApp.shouldOpenDialog) {
+        _rateMyApp.showStarRateDialog(
+          context,
+          title: AppLocalizations.of(context)!.feedbackTitle,
+          message: AppLocalizations.of(context)!.feedbackMessage,
+          actionsBuilder: (context, stars) {
+            return [
+              OutlinedButton(
+                child: Text(
+                  'OK',
+                  style:
+                      TextStyle(color: Theme.of(context).unselectedWidgetColor),
+                ),
+                onPressed: () async {
+                  await _rateMyApp
+                      .callEvent(RateMyAppEventType.rateButtonPressed);
+                  Navigator.pop<RateMyAppDialogButton>(
+                      context, RateMyAppDialogButton.rate);
+                },
+              ),
+            ];
+          },
+          dialogStyle: const DialogStyle(
+            titleAlign: TextAlign.center,
+            messageAlign: TextAlign.center,
+            messagePadding: EdgeInsets.only(bottom: 20.0),
+          ),
+          starRatingOptions: const StarRatingOptions(),
+        );
+      }
+    });
   }
 
   @override
