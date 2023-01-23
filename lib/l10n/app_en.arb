@@ -1,8 +1,7 @@
 {
-    "@@locale" : "en",
-    "appName" : "Demo app",
-
-    "helloWorld": "Hello World!",
+    "@@locale": "en",
+    "appName": "Posti-Liste",
+    
     "today": "Today",
     "tomorrow": "Tomorrow",
     "overdue": "Overdue",
@@ -25,5 +24,4 @@
     "networkError": "ERROR: Product could not be searched due to network problems",
     "feedbackTitle": "Your feedback is important!",
     "feedbackMessage": "Tap on a star to rate Posti-Liste, \n  we would appreciate it."
-
 }

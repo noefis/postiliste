@@ -1,0 +1,27 @@
+{
+    "@@locale": "pt",
+    "appName": "Posti-Liste",
+    
+    "today": "Hoje",
+    "tomorrow": "Amanhã",
+    "overdue": "Vencido",
+    "done": "Feito",
+    "cancel": "Cancelar",
+    "createNewList": "Criar uma nova lista",
+    "nameNewList": "Nome da nova lista",
+    "newList": "Nova Lista",
+    "changeList": "Lista de Alterações",
+    "add": "Acrescentar",
+    "confirm": "Confirmar",
+    "deleteList": "Eliminar lista",
+    "title": "Título",
+    "enterDate": "Introduzir data",
+    "productNotInDB": "ERROR: Produto que não está na base de dados",
+    "noProductFound": "ERRO: Não foi encontrado nenhum produto para o código de barras",
+    "notAbleToScan": "ERROR: Não conseguir digitalizar correctamente o código de barras",
+    "cameraDenied": "ERROR: Não conseguir aceder à câmara",
+    "barcodeScannerRunning": "ERROR: O leitor de código de barras já está a funcionar",
+    "networkError": "ERROR: O produto não pôde ser pesquisado devido a problemas na rede",
+    "feedbackTitle": "O seu feedback é importante!",
+    "feedbackMessage": "Toque numa estrela para avaliar Posti-Liste, e agradecíamos que o fizesse"
+}

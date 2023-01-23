@@ -51,6 +51,11 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: const [
         Locale('en', ''), // English, no country code
         Locale('de', ''), // German, no country code
+        Locale('fr', ''), // French, no country code
+        Locale('es', ''), // Spanish, no country code
+        Locale('it', ''), // Italian, no country code
+        Locale('pt', ''), // Portuguese, no country code
+        Locale('pl', ''), // Polish, no country code
       ],
       home: const MyHomePage(title: 'Posti-Liste'),
     );

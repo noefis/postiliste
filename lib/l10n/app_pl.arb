@@ -1,0 +1,27 @@
+{
+    "@@locale": "pl",
+    "appName": "Posti-Liste",
+
+    "today": "Dziś",
+    "tomorrow": "Jutro",
+    "overdue": "Zaległe",
+    "done": "Gotowe",
+    "cancel": "Anuluj",
+    "createNewList": "Utwórz nową listę",
+    "nameNewList": "Nazwa nowej listy",
+    "newList": "Nowa lista",
+    "changeList": "Zmień listę",
+    "add": "Dodaj",
+    "confirm": "Potwierdź",
+    "deleteList": "Usuń listę",
+    "title": "Tytuł",
+    "enterDate": "Wprowadź datę",
+    "productNotInDB": "ERROR: Product not in database",
+    "noProductFound": "ERROR: Nie znaleziono produktu dla kodu kreskowego",
+    "notAbleToScan": "ERROR: Not able to scan barcode correctly",
+    "cameraDenied": "ERROR: Not able to access camera",
+    "barcodeScannerRunning": "ERROR: Barcode scanner is already running",
+    "networkError": "ERROR: Produkt nie mógł zostać wyszukany z powodu problemów z siecią",
+    "feedbackTitle": "Twoja opinia jest ważna!",
+    "feedbackMessage": "Stuknij w gwiazdkę, aby ocenić Posti-Liste, będziemy wdzięczni"
+}
