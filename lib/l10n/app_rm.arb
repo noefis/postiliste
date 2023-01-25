@@ -1,0 +1,27 @@
+{
+    "@@locale": "rm",
+    "appName": "Posti-Liste",
+    
+    "today": "Oz",
+    "tomorrow": "Damaun",
+    "overdue": "Retardà",
+    "done": "Permess",
+    "cancel": "Rumper giu",
+    "createNewList": "Crear ina nova glista",
+    "nameNewList": "Num da la nova glista",
+    "newList": "Nova glista",
+    "changeList": "glista da midadas",
+    "add": "Agiuntar",
+    "confirm": " Confermar",
+    "deleteList": "Svidar la glista",
+    "title": "Titel",
+    "enterDate": "D'endatar la data",
+    "productNotInDB": "ERROR: Product betg en la banca da datas",
+    "noProductFound": "ERROR: Per il barcode n'han ins chattà nagin product",
+    "notAbleToScan": "ERROR: Barcode na po betg vegnir scannà correctamain",
+    "cameraDenied": "ERROR: Na po betg acceder a la camera",
+    "barcodeScannerRunning": "ERROR: Scanner da barcode va gia",
+    "networkError": "ERROR: Il product n'ha betg pudì vegnir tschertgà pervia da problems da la rait",
+    "feedbackTitle": "Tes feedback è impurtant!",
+    "feedbackMessage": "Tips sin ina staila per valitar Posti-Liste. Nus ans legrassan."
+}

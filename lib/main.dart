@@ -56,6 +56,7 @@ class _MyAppState extends State<MyApp> {
         Locale('it', ''), // Italian, no country code
         Locale('pt', ''), // Portuguese, no country code
         Locale('pl', ''), // Polish, no country code
+        Locale('rm', ''), // Romansh (Switzerland), no country code
       ],
       home: const MyHomePage(title: 'Posti-Liste'),
     );
