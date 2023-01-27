@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:postiliste/visual_elements/input_radio.dart';
 
 class AutoComplete extends StatelessWidget {
   final Function? onSubmit;
@@ -15,7 +16,11 @@ class AutoComplete extends StatelessWidget {
       this.onChange,
       required this.removeFromAutoCompleteList,
       required this.options,
-      this.inputDecoration = const InputDecoration(border: InputBorder.none)});
+      this.inputDecoration = const InputDecoration(
+        prefixIcon: InputRadio(),
+        border: InputBorder.none,
+        prefixIconConstraints: BoxConstraints(),
+      )});
 
   @override
   Widget build(BuildContext context) {

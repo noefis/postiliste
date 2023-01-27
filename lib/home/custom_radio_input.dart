@@ -107,7 +107,8 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
                     })
               },
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding:
+                EdgeInsets.symmetric(horizontal: widget.isFocused ? 12 : 3),
             margin: const EdgeInsets.symmetric(vertical: 3),
             decoration: BoxDecoration(
                 border: Border.all(
@@ -118,8 +119,6 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
                 borderRadius: const BorderRadius.all(Radius.circular(15))),
             child: Row(
               children: [
-                widget.isFocused ? Container() : const InputRadio(),
-                const SizedBox(width: 12),
                 Expanded(
                     child: LayoutBuilder(
                         builder: (context, constraints) => Autocomplete<String>(
@@ -136,6 +135,11 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
                                   controller: textEditingController,
                                   focusNode: focusNode,
                                   decoration: InputDecoration(
+                                      prefixIcon: widget.isFocused
+                                          ? null
+                                          : const InputRadio(),
+                                      prefixIconConstraints:
+                                          const BoxConstraints(),
                                       hintStyle: TextStyle(
                                           color: widget.isFocused
                                               ? Theme.of(context)

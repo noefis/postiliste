@@ -30,6 +30,7 @@ class InputRadio extends StatelessWidget {
     );
 
     return Container(
+        margin: const EdgeInsets.only(right: 12, left: 9),
         constraints: const BoxConstraints(
             maxWidth: 25, maxHeight: 25, minHeight: 25, minWidth: 25),
         decoration: BoxDecoration(

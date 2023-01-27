@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:postiliste/visual_elements/audo_complete.dart';
-import 'package:postiliste/visual_elements/input_radio.dart';
+import 'package:postiliste/visual_elements/auto_complete.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SingleItemRadioInput extends StatefulWidget {
@@ -78,19 +77,14 @@ class _SingleItemRadioInput<T> extends State<SingleItemRadioInput> {
   Widget build(BuildContext context) {
     _getAutoComplete();
     return InkWell(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 9),
-        child: Row(
-          children: [
-            const InputRadio(),
-            const SizedBox(width: 12),
-            Expanded(
-                child: AutoComplete(
-                    onSubmit: _newList,
-                    removeFromAutoCompleteList: _removeFromAutoCompleteList,
-                    options: _kOptions))
-          ],
-        ),
+      child: Row(
+        children: [
+          Expanded(
+              child: AutoComplete(
+                  onSubmit: _newList,
+                  removeFromAutoCompleteList: _removeFromAutoCompleteList,
+                  options: _kOptions))
+        ],
       ),
     );
   }

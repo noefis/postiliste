@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:postiliste/visual_elements/audo_complete.dart';
+import 'package:postiliste/visual_elements/auto_complete.dart';
 import 'package:postiliste/visual_elements/date_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
