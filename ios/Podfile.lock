@@ -5,6 +5,8 @@ PODS:
     - SwiftProtobuf
   - Flutter (1.0.0)
   - MTBBarcodeScanner (5.0.11)
+  - rate_my_app (1.1.3):
+    - Flutter
   - shared_preferences_ios (0.0.1):
     - Flutter
   - SwiftProtobuf (1.20.3)
@@ -12,6 +14,7 @@ PODS:
 DEPENDENCIES:
   - barcode_scan2 (from `.symlinks/plugins/barcode_scan2/ios`)
   - Flutter (from `Flutter`)
+  - rate_my_app (from `.symlinks/plugins/rate_my_app/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
 
 SPEC REPOS:
@@ -24,6 +27,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/barcode_scan2/ios"
   Flutter:
     :path: Flutter
+  rate_my_app:
+    :path: ".symlinks/plugins/rate_my_app/ios"
   shared_preferences_ios:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
 
@@ -31,6 +36,7 @@ SPEC CHECKSUMS:
   barcode_scan2: 0af2bb63c81b4565aab6cd78278e4c0fa136dbb0
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
+  rate_my_app: 96f658ddb7f0a8d2f46d54452583f084760aef57
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   SwiftProtobuf: b02b5075dcf60c9f5f403000b3b0c202a11b6ae1
 
