@@ -1,13 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:postiliste/single_item/single_item_view.dart';
 import 'package:postiliste/visual_elements/custom_radio.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:expand_tap_area/expand_tap_area.dart';
 
 class MyRadioListTile extends StatefulWidget {
-  final String? title;
+  final String title;
   final String prefKey;
   final bool first;
   final Function() notifyParent;
@@ -61,6 +63,33 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
     }
   }
 
+  void shareList() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> activeList = prefs.getStringList(widget.prefKey) ?? [''];
+
+    List<String> items = [];
+    List<String> tmp = [];
+
+    for (var item in activeList) {
+      {
+        tmp = item.split(',');
+        tmp.removeLast();
+
+        items.add(tmp.join(","));
+      }
+    }
+
+    String link = "postiliste://share-postiliste.ch";
+    List<String> tmpList = widget.prefKey.replaceAll("\"", "'").split(" ");
+    tmpList.removeLast();
+    String title = tmpList.join(" ");
+    String data = jsonEncode(items).replaceAll("\"", "'");
+
+    //TODO add translations
+    Share.share(
+        "I've created a shopping list for you: $link?title=$title&data=$data");
+  }
+
   void _removeWidget() async {
     if (mounted) {
       final prefs = await SharedPreferences.getInstance();
@@ -84,13 +113,14 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
         duration: const Duration(milliseconds: 300),
         onEnd: _visible ? () => {} : () => _removeWidget(),
         child: InkWell(
+          onLongPress: () => shareList(),
           onTap: () {
             if (!_value) {
               Navigator.push(
                 context,
                 PageRouteBuilder(
                   pageBuilder: (_, __, ___) => SingleItemViewRoute(
-                    title: widget.title!,
+                    title: widget.title,
                     prefKey: widget.prefKey,
                     notifyParent: widget.notifyParent,
                   ),
@@ -136,7 +166,7 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
                                       color: Theme.of(context).hoverColor))),
                           child: Row(children: [
                             Expanded(
-                                child: Text(widget.title!,
+                                child: Text(widget.title,
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium

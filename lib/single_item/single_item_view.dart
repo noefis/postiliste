@@ -132,7 +132,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
       final String productName = item.removeAt(0);
       final List<String> images = item;
       if (!productName.contains("ERROR")) {
-        _newList(productName, images);
+        _newList("$productName,$barcode", images);
       } else {
         error = productName;
       }

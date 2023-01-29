@@ -42,7 +42,7 @@ class _DateItem<T> extends State<DateItem> {
           children: [
             for (String key in widget.radios.keys)
               MyRadioListTile(
-                title: widget.radios[key],
+                title: widget.radios[key]!,
                 first: widget.first && widget.radios.keys.elementAt(0) == key,
                 prefKey: key,
                 notifyParent: refresh,

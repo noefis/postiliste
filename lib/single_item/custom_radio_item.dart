@@ -176,6 +176,10 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
         : widget.title!.replaceAll('_deactivated', '');
     List<String> tmp = _key.split(',');
     _last = tmp.removeLast();
+    if ((tmp.last.length == 12 || tmp.last.length == 13) &&
+        double.tryParse(tmp.last) != null) {
+      tmp.removeLast();
+    }
     _title = tmp.join(",");
     _textFormFieldController = TextEditingController(text: _title);
 
