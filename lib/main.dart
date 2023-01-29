@@ -5,6 +5,10 @@ import 'package:postiliste/dark_theme_styles.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'dart:async';
+import 'package:uni_links/uni_links.dart';
+import 'package:flutter/services.dart' show PlatformException;
+
 import 'dark_theme_provider.dart';
 import 'home/home_page.dart';
 
@@ -35,9 +39,23 @@ class _MyAppState extends State<MyApp> {
         await themeChangeProvider.darkThemePreference.getTheme();
   }
 
+  Future<String?> initUniLinks() async {
+    try {
+      final String? initialLink = await getInitialLink();
+      debugPrint(initialLink.toString());
+      return initialLink;
+    } on PlatformException {
+      debugPrint('platfrom exception unilink');
+      return null;
+    }
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    //handle deep links
+    initUniLinks();
+
     return MaterialApp(
       title: 'Posti-Liste',
       theme: Styles.themeDataLight(context),
