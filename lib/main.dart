@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
@@ -28,9 +29,20 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   DarkThemeProvider themeChangeProvider = DarkThemeProvider();
 
+  bool _initialUniLinksHandled = false;
+  String? _initialLink;
+  String? _currentLink;
+  Object? _err;
+
+  StreamSubscription? _streamSubscription;
+
   @override
   void initState() {
     super.initState();
+    //handle deep links
+    _initUniLinks();
+    _incomingLinkHandler();
+
     getCurrentAppTheme();
   }
 
@@ -39,23 +51,55 @@ class _MyAppState extends State<MyApp> {
         await themeChangeProvider.darkThemePreference.getTheme();
   }
 
-  Future<String?> initUniLinks() async {
-    try {
-      final String? initialLink = await getInitialLink();
-      debugPrint(initialLink.toString());
-      return initialLink;
-    } on PlatformException {
-      debugPrint('platfrom exception unilink');
-      return null;
+  Future<void> _initUniLinks() async {
+    if (!_initialUniLinksHandled) {
+      _initialUniLinksHandled = true;
+      try {
+        final String? initialLink = await getInitialLink();
+        if (initialLink != null && mounted) {
+          debugPrint("Initial URI: $initialLink");
+        } else {
+          debugPrint("Null initial URI received");
+        }
+      } on PlatformException {
+        debugPrint('platfrom exception unilink');
+      }
     }
+  }
+
+  void _incomingLinkHandler() {
+    if (!kIsWeb) {
+      _streamSubscription = linkStream.listen((String? link) {
+        if (!mounted) {
+          return;
+        }
+        debugPrint("received Link: $link");
+
+        setState(() {
+          _currentLink = link;
+          _err = null;
+        });
+      }, onError: (Object err) {
+        if (!mounted) {
+          return;
+        }
+        debugPrint("error occured: $err");
+        setState(() {
+          _currentLink = null;
+        });
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _streamSubscription?.cancel();
+    super.dispose();
   }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    //handle deep links
-    initUniLinks();
-
     return MaterialApp(
       title: 'Posti-Liste',
       theme: Styles.themeDataLight(context),

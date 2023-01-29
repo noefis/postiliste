@@ -10,12 +10,15 @@ PODS:
   - shared_preferences_ios (0.0.1):
     - Flutter
   - SwiftProtobuf (1.20.3)
+  - uni_links (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - barcode_scan2 (from `.symlinks/plugins/barcode_scan2/ios`)
   - Flutter (from `Flutter`)
   - rate_my_app (from `.symlinks/plugins/rate_my_app/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
+  - uni_links (from `.symlinks/plugins/uni_links/ios`)
 
 SPEC REPOS:
   trunk:
@@ -31,6 +34,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/rate_my_app/ios"
   shared_preferences_ios:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
+  uni_links:
+    :path: ".symlinks/plugins/uni_links/ios"
 
 SPEC CHECKSUMS:
   barcode_scan2: 0af2bb63c81b4565aab6cd78278e4c0fa136dbb0
@@ -39,6 +44,7 @@ SPEC CHECKSUMS:
   rate_my_app: 96f658ddb7f0a8d2f46d54452583f084760aef57
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   SwiftProtobuf: b02b5075dcf60c9f5f403000b3b0c202a11b6ae1
+  uni_links: d97da20c7701486ba192624d99bffaaffcfc298a
 
 PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
 
