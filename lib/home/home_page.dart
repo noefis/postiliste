@@ -1,14 +1,17 @@
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:postiliste/home/preference_helper.dart';
 
 import 'date_helper.dart';
 import 'date_item.dart';
 import 'new_item_view.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title, this.link});
   final String title;
+  final String? link;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -73,9 +76,60 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Future<void> _showDialog() async {
+    if (widget.link != null) {
+      List<dynamic> data = jsonDecode(widget.link!);
+      final prefKey = data.removeAt(0);
+      List tmp = prefKey.split(",");
+      tmp.removeLast();
+      String title = tmp.join(",");
+
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Theme.of(context).indicatorColor,
+            title: Text("Add list: $title",
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w700)),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text("Do you want to add $title to your shopping list?",
+                      style: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: Theme.of(context).disabledColor,
+                          fontSize: 18)),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Add',
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 18)),
+                onPressed: () {
+                  newList(title, prefKey);
+                  newMultipleItems(data, prefKey, context);
+                  Navigator.of(context).pop();
+                  setState(() {});
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _getLists();
+    Future.delayed(const Duration(seconds: 0), () {
+      _showDialog();
+    });
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(

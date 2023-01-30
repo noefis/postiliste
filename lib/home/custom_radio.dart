@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:postiliste/single_item/my_barcode_scanner.dart';
 import 'package:postiliste/single_item/single_item_view.dart';
 import 'package:postiliste/visual_elements/custom_radio.dart';
 import 'package:share_plus/share_plus.dart';
@@ -67,27 +69,36 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
     final prefs = await SharedPreferences.getInstance();
     List<String> activeList = prefs.getStringList(widget.prefKey) ?? [''];
 
-    List<String> items = [];
+//TODO remove h,min,etc and generate new when leaded
+    List<String> items = [widget.prefKey];
     List<String> tmp = [];
 
     for (var item in activeList) {
       {
         tmp = item.split(',');
         tmp.removeLast();
-
-        items.add(tmp.join(","));
+        if (isBarcode(tmp.last)) {
+          items.add(tmp.last);
+        } else {
+          items.add(tmp.join(","));
+        }
       }
     }
 
     String link = "postiliste://share-postiliste.ch";
-    List<String> tmpList = widget.prefKey.replaceAll("\"", "'").split(" ");
-    tmpList.removeLast();
-    String title = tmpList.join(" ");
-    String data = jsonEncode(items).replaceAll("\"", "'");
+    String data = _encode(jsonEncode(items));
 
     //TODO add translations
+    debugPrint(data);
+    debugPrint(jsonEncode(items));
     Share.share(
-        "I've created a shopping list for you: $link?title=$title&data=$data");
+        "Can you go shopping for me? Here is the shopping list:\n$link?data=$data");
+  }
+
+  String _encode(String json) {
+    final encodedJson = utf8.encode(json);
+    final gZipJson = gzip.encode(encodedJson);
+    return base64.encode(gZipJson);
   }
 
   void _removeWidget() async {

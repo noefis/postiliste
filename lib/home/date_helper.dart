@@ -18,6 +18,7 @@ Future<SplayTreeMap<DateTime, Map<String, String>>> getLists() async {
   var tmpLists = SplayTreeMap<DateTime, Map<String, String>>();
 
   List<String>? activeLists = prefs.getStringList("active");
+  debugPrint(prefs.getKeys().toString());
 
   activeLists?.forEach((active) {
     List actives = active.split(',');

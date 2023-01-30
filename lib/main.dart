@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -30,8 +33,7 @@ class _MyAppState extends State<MyApp> {
   DarkThemeProvider themeChangeProvider = DarkThemeProvider();
 
   bool _initialUniLinksHandled = false;
-  String? _initialLink;
-  String? _currentLink;
+  String? _link;
   Object? _err;
 
   StreamSubscription? _streamSubscription;
@@ -55,15 +57,46 @@ class _MyAppState extends State<MyApp> {
     if (!_initialUniLinksHandled) {
       _initialUniLinksHandled = true;
       try {
-        final String? initialLink = await getInitialLink();
+        String? initialLink = await getInitialLink();
+
+        //TODO remove
+        initialLink =
+            "postiliste://share-postiliste.ch?data=H4sIAAAAAAAAA4tWys7WMTIwMtY1MNQ1slQwMrIytbQyNNczMLZQ0lFKTAIS5maGxsaGRsamQGVGSrEANWsx5TMAAAA=";
         if (initialLink != null && mounted) {
-          debugPrint("Initial URI: $initialLink");
+          setState(() {
+            _link = _getData(initialLink!);
+          });
+          debugPrint("Initial URI: ${_getData(initialLink)}");
         } else {
           debugPrint("Null initial URI received");
+          setState(() {
+            _link = null;
+          });
         }
       } on PlatformException {
         debugPrint('platfrom exception unilink');
+        setState(() {
+          _link = null;
+        });
       }
+    }
+  }
+
+  String _decode(String base64Json) {
+    final decodeBase64Json = base64.decode(base64Json);
+    final decodegZipJson = gzip.decode(decodeBase64Json);
+    return utf8.decode(decodegZipJson);
+  }
+
+  String? _getData(String link) {
+    List<String> splitLink = link.split("?");
+    String data = splitLink.last.replaceFirst("data=", "");
+
+    final pattern =
+        RegExp(r'^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$');
+
+    if (pattern.hasMatch(data)) {
+      return _decode(data);
     }
   }
 
@@ -73,10 +106,10 @@ class _MyAppState extends State<MyApp> {
         if (!mounted) {
           return;
         }
-        debugPrint("received Link: $link");
+        debugPrint("received Link: ${_getData(link!)}");
 
         setState(() {
-          _currentLink = link;
+          _link = link;
           _err = null;
         });
       }, onError: (Object err) {
@@ -85,7 +118,7 @@ class _MyAppState extends State<MyApp> {
         }
         debugPrint("error occured: $err");
         setState(() {
-          _currentLink = null;
+          _link = null;
         });
       });
     }
@@ -120,7 +153,7 @@ class _MyAppState extends State<MyApp> {
         Locale('pl', ''), // Polish, no country code
         Locale('rm', ''), // Romansh (Switzerland), no country code
       ],
-      home: const MyHomePage(title: 'Posti-Liste'),
+      home: MyHomePage(title: 'Posti-Liste', link: _link),
     );
   }
 }

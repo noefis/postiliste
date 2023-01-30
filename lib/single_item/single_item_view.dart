@@ -183,6 +183,11 @@ class _SingleItemView extends State<SingleItemViewRoute> {
   }
 
   void _putAutoCompleteList(prefs, value) {
+    if (isBarcode(value.split(",").last)) {
+      List tmp = value.split(",");
+      tmp.removeLast();
+      value = tmp.join(",");
+    }
     List<String> autoCompleteList =
         prefs.getStringList("autoCompleteItem") ?? [];
     if (!autoCompleteList.contains(value)) {

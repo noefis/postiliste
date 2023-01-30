@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
+import 'package:postiliste/single_item/my_barcode_scanner.dart';
 import 'package:postiliste/single_item/picture_view.dart';
 import 'package:postiliste/visual_elements/custom_radio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -176,8 +177,7 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
         : widget.title!.replaceAll('_deactivated', '');
     List<String> tmp = _key.split(',');
     _last = tmp.removeLast();
-    if ((tmp.last.length == 12 || tmp.last.length == 13) &&
-        double.tryParse(tmp.last) != null) {
+    if (isBarcode(tmp.last)) {
       tmp.removeLast();
     }
     _title = tmp.join(",");
