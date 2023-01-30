@@ -9,6 +9,7 @@ import 'package:postiliste/visual_elements/custom_radio.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:expand_tap_area/expand_tap_area.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyRadioListTile extends StatefulWidget {
   final String title;
@@ -80,7 +81,7 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
       {
         tmp = item.split(',');
         tmp.removeLast();
-        if (isBarcode(tmp.last)) {
+        if (tmp.isNotEmpty && isBarcode(tmp.last)) {
           items.add(tmp.last);
         } else {
           items.add(tmp.join(","));
@@ -95,7 +96,7 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
     debugPrint(data);
     debugPrint(jsonEncode(items));
     Share.share(
-        "Can you go shopping for me? Here is the shopping list:\n$link?data=$data");
+        "${AppLocalizations.of(context)!.goShopping}\n$link?data=$data");
   }
 
   String _encode(String json) {

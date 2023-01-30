@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:postiliste/home/preference_helper.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'date_helper.dart';
 import 'date_item.dart';
@@ -110,14 +111,14 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (BuildContext context) {
           return AlertDialog(
             backgroundColor: Theme.of(context).indicatorColor,
-            title: Text("Add list: $title",
+            title: Text(AppLocalizations.of(context)!.addList + title,
                 style: Theme.of(context).textTheme.headline5?.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.w700)),
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
-                  Text("Do you want to add $title to your shopping list?",
+                  Text(AppLocalizations.of(context)!.confirmAddList(title),
                       style: Theme.of(context).textTheme.headline6?.copyWith(
                           color: Theme.of(context).disabledColor,
                           fontSize: 18)),
@@ -126,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             actions: <Widget>[
               TextButton(
-                child: Text('Add',
+                child: Text(AppLocalizations.of(context)!.add,
                     style: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 18)),

@@ -10,6 +10,17 @@
     "createNewList": "Crear ina nova glista",
     "nameNewList": "Num da la nova glista",
     "newList": "Nova glista",
+    "addList": "Agiuntar glista: ",
+    "confirmAddList": "Vulais Vus agiuntar {title} a Vossa glista da cumpra?",
+    "@confirmAddList": {
+        "placeholders": {
+          "title": {
+            "type": "String",
+            "example": "Bob"
+          }
+        }
+      },
+    "goShopping": "Po ti ir a cumprar en per mai? Qua è la glista da las cumissiuns:",
     "changeList": "glista da midadas",
     "add": "Agiuntar",
     "confirm": " Confermar",

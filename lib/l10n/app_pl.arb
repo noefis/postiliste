@@ -10,6 +10,17 @@
     "createNewList": "Utwórz nową listę",
     "nameNewList": "Nazwa nowej listy",
     "newList": "Nowa lista",
+    "addList": "Dodaj listę: ",
+    "confirmAddList": "Czy chcesz dodać {title} do swojej listy zakupów?",
+    "@confirmAddList": {
+        "placeholders": {
+          "title": {
+            "type": "String",
+            "example": "Bob"
+          }
+        }
+      },
+    "goShopping": "Czy możesz zrobić dla mnie zakupy? Tu jest lista zakupów:",
     "changeList": "Zmień listę",
     "add": "Dodaj",
     "confirm": "Potwierdź",
