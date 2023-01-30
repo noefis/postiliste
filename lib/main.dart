@@ -58,13 +58,9 @@ class _MyAppState extends State<MyApp> {
       _initialUniLinksHandled = true;
       try {
         String? initialLink = await getInitialLink();
-
-        //TODO remove
-        initialLink =
-            "postiliste://share-postiliste.ch?data=H4sIAAAAAAAAA4tWys7WMTIwMtY1MNQ1slQwMrIytbQyNNczMLZQ0lFKTAIS5maGxsaGRsamQGVGSrEANWsx5TMAAAA=";
         if (initialLink != null && mounted) {
           setState(() {
-            _link = _getData(initialLink!);
+            _link = _getData(initialLink);
           });
           debugPrint("Initial URI: ${_getData(initialLink)}");
         } else {
@@ -79,6 +75,10 @@ class _MyAppState extends State<MyApp> {
           _link = null;
         });
       }
+    } else {
+      setState(() {
+        _link = null;
+      });
     }
   }
 
@@ -124,6 +124,12 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  void _removeLink() {
+    setState(() {
+      _link = null;
+    });
+  }
+
   @override
   void dispose() {
     _streamSubscription?.cancel();
@@ -153,7 +159,8 @@ class _MyAppState extends State<MyApp> {
         Locale('pl', ''), // Polish, no country code
         Locale('rm', ''), // Romansh (Switzerland), no country code
       ],
-      home: MyHomePage(title: 'Posti-Liste', link: _link),
+      home: MyHomePage(
+          title: 'Posti-Liste', link: _link, notifyParent: _removeLink),
     );
   }
 }

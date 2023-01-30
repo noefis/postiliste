@@ -9,9 +9,11 @@ import 'date_item.dart';
 import 'new_item_view.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, this.link});
+  const MyHomePage(
+      {super.key, required this.title, this.link, required this.notifyParent});
   final String title;
   final String? link;
+  final Function notifyParent;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -76,10 +78,28 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  String adjustDate(String title) {
+    List<String> titleList = title.split(",");
+    String dateString = titleList.removeLast();
+    DateTime date = DateTime.parse(dateString);
+
+    DateTime dateTime = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        DateTime.now().hour,
+        DateTime.now().minute,
+        DateTime.now().second,
+        DateTime.now().millisecond);
+
+    titleList.add(dateTime.toString());
+    return titleList.join(",");
+  }
+
   Future<void> _showDialog() async {
     if (widget.link != null) {
       List<dynamic> data = jsonDecode(widget.link!);
-      final prefKey = data.removeAt(0);
+      final prefKey = adjustDate(data.removeAt(0));
       List tmp = prefKey.split(",");
       tmp.removeLast();
       String title = tmp.join(",");
@@ -113,6 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   newList(title, prefKey);
                   newMultipleItems(data, prefKey, context);
+                  widget.notifyParent();
                   Navigator.of(context).pop();
                   setState(() {});
                 },

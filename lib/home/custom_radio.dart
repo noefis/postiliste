@@ -69,8 +69,11 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
     final prefs = await SharedPreferences.getInstance();
     List<String> activeList = prefs.getStringList(widget.prefKey) ?? [''];
 
-//TODO remove h,min,etc and generate new when leaded
-    List<String> items = [widget.prefKey];
+    List tmpTitle = widget.prefKey.split(" ");
+    tmpTitle.removeLast();
+    String title = tmpTitle.join(" ");
+
+    List<String> items = [title];
     List<String> tmp = [];
 
     for (var item in activeList) {
