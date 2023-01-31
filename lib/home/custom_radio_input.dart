@@ -94,7 +94,6 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
 
   @override
   Widget build(BuildContext context) {
-    _wasFocused = widget.isFocused == true ? true : _wasFocused;
     _getAutoComplete();
     return InkWell(
       child: AnimatedOpacity(
@@ -158,6 +157,8 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
                                       _newList(value, textEditingController)),
                                   onTap: () => {
                                     setState(() {
+                                      _wasFocused =
+                                          _visible && widget.isFocused;
                                       widget.isFocused
                                           ? _visible = false
                                           : null;
