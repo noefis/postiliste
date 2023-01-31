@@ -59,10 +59,11 @@ class _MyAppState extends State<MyApp> {
       try {
         String? initialLink = await getInitialLink();
         if (initialLink != null && mounted) {
+          String? data = _getData(initialLink);
           setState(() {
-            _link = _getData(initialLink);
+            _link = data;
           });
-          debugPrint("Initial URI: ${_getData(initialLink)}");
+          debugPrint("Initial URI: $data");
         } else {
           debugPrint("Null initial URI received");
           setState(() {
@@ -103,13 +104,14 @@ class _MyAppState extends State<MyApp> {
   void _incomingLinkHandler() {
     if (!kIsWeb) {
       _streamSubscription = linkStream.listen((String? link) {
-        if (!mounted) {
+        if (!mounted || link == null) {
           return;
         }
-        debugPrint("received Link: ${_getData(link!)}");
+        String? data = _getData(link);
+        debugPrint("received Link: $data");
 
         setState(() {
-          _link = link;
+          _link = data;
           _err = null;
         });
       }, onError: (Object err) {
