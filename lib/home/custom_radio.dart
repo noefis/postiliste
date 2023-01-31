@@ -92,11 +92,9 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
     String link = "postiliste://share-postiliste.ch";
     String data = _encode(jsonEncode(items));
 
-    //TODO add translations
     debugPrint(data);
     debugPrint(jsonEncode(items));
-    Share.share(
-        "${AppLocalizations.of(context)!.goShopping}\n$link?data=$data");
+    Share.share("$link?data=$data");
   }
 
   String _encode(String json) {
