@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-//TODO add translations (and confetti)
+//TODO add translations
 Future<void> thankYou(context) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: true,
+    barrierColor: const Color.fromARGB(83, 0, 0, 0),
     builder: (BuildContext context) {
       return AlertDialog(
         backgroundColor: Theme.of(context).indicatorColor,
@@ -26,7 +27,7 @@ Future<void> thankYou(context) async {
             child: Text("Thank You for Downloading!",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headline5?.copyWith(
-                    color: Theme.of(context).unselectedWidgetColor,
+                    color: Colors.white,
                     fontSize: 40,
                     fontWeight: FontWeight.w700))),
         titlePadding: const EdgeInsets.only(top: 0),
@@ -41,7 +42,7 @@ Future<void> thankYou(context) async {
                       color: Theme.of(context).unselectedWidgetColor,
                       fontSize: 18)),
               const Padding(padding: EdgeInsets.all(10)),
-              Text("Noël Fischer",
+              Text("Noel",
                   textAlign: TextAlign.justify,
                   style: Theme.of(context).textTheme.headline6?.copyWith(
                       color: Theme.of(context).unselectedWidgetColor,

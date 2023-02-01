@@ -15,7 +15,7 @@ class Styles {
         disabledColor: Colors.black54,
         secondaryHeaderColor: Colors.white12,
         shadowColor: Colors.grey,
-        unselectedWidgetColor: Colors.black,
+        unselectedWidgetColor: const Color.fromARGB(255, 24, 24, 24),
         cardColor: Colors.white,
         canvasColor: Colors.grey[50],
         brightness: Brightness.light,

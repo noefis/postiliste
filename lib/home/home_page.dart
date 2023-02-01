@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:postiliste/home/preference_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:postiliste/home/thank_you_confetti.dart';
 import 'package:postiliste/home/thank_you.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -189,6 +190,9 @@ class _MyHomePageState extends State<MyHomePage> {
       body: ListView(
         padding: const EdgeInsets.only(top: 48, left: 15, right: 15),
         children: [
+          (widget.link == null && _thanks)
+              ? const ThankYouConfetti()
+              : Container(),
           ..._lists.keys.map((key) => DateItem(
                 dateTime: key,
                 first: _lists.keys.elementAt(0) == key,
