@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:postiliste/home/preference_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:postiliste/home/thank_you.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'date_helper.dart';
 import 'date_item.dart';
@@ -21,6 +23,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool _thanks = false;
   Map _lists = <DateTime, Map<String, String>>{};
   bool _isEmpty = false;
   DateTime _lastDay = DateTime(
@@ -146,12 +149,31 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void loadThankYou() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool? shownThanks = prefs.getBool("merci");
+    if (shownThanks != true) {
+      prefs.setBool("merci", true);
+      setState(() {
+        _thanks = true;
+      });
+    } else {
+      _thanks = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    loadThankYou();
     _getLists();
     Future.delayed(const Duration(seconds: 0), () {
       _showDialog();
     });
+    (widget.link == null && _thanks)
+        ? Future.delayed(const Duration(seconds: 0), () {
+            thankYou(context);
+          })
+        : Container();
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
