@@ -9,7 +9,6 @@ import 'package:postiliste/visual_elements/custom_radio.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:expand_tap_area/expand_tap_area.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyRadioListTile extends StatefulWidget {
   final String title;

@@ -93,7 +93,6 @@ Text date(DateTime date, context) {
 
 Text lastDate(DateTime date, context) {
   final tomorrow = DateTime(_now.year, _now.month, _now.day + 1);
-  debugPrint(date.toString() + tomorrow.toString());
 
   if (date == tomorrow) {
     return Text(AppLocalizations.of(context)!.tomorrow,

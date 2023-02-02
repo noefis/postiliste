@@ -22,6 +22,7 @@
       },
     "changeList": "Cambia elenco",
     "add": "Aggiungi",
+    "close": "Chiudere",
     "confirm": "Conferma",
     "deleteList": "Elimina elenco",
     "title": "Titolo",
@@ -33,5 +34,8 @@
     "barcodeScannerRunning": "ERRORE: lo scanner di codici a barre è già in esecuzione",
     "networkError": "ERRORE: Impossibile cercare il prodotto a causa di problemi di rete",
     "feedbackTitle": "Il vostro feedback è importante!",
-    "feedbackMessage": "Toccate una stella per valutare Posti-Liste, lo apprezzeremmo molto."
+    "feedbackMessage": "Toccate una stella per valutare Posti-Liste, lo apprezzeremmo molto.",
+    "welcomeTitle": "Grazie per il download!",
+    "welcomeMessage": "Sono lieto che abbia deciso di provare la mia applicazione. Spero che lo troviate utile e piacevole. Contattatemi per qualsiasi domanda o feedback.",
+    "welcomeSignature": "Creatore di Posti-Liste"
 }

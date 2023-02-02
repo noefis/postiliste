@@ -22,6 +22,7 @@
       },
     "changeList": "Lista de Alterações",
     "add": "Acrescentar",
+    "close": "Fechar",
     "confirm": "Confirmar",
     "deleteList": "Eliminar lista",
     "title": "Título",
@@ -33,5 +34,8 @@
     "barcodeScannerRunning": "ERROR: O leitor de código de barras já está a funcionar",
     "networkError": "ERROR: O produto não pôde ser pesquisado devido a problemas na rede",
     "feedbackTitle": "O seu feedback é importante!",
-    "feedbackMessage": "Toque numa estrela para avaliar Posti-Liste, e agradecíamos que o fizesse."
+    "feedbackMessage": "Toque numa estrela para avaliar Posti-Liste, e agradecíamos que o fizesse.",
+    "welcomeTitle": "Obrigado por descarregar!",
+    "welcomeMessage": "Ainda bem que decidiu experimentar a minha aplicação. Espero que o ache útil e agradável. Por favor contacte-me se tiver quaisquer perguntas ou feedback.",
+    "welcomeSignature": "Criador da Posti-Liste"
 }

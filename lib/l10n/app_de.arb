@@ -22,6 +22,7 @@
       },
     "changeList": "Liste ändern",
     "add": "Hinzufügen",
+    "close": "Schliessen",
     "confirm": "Speichern",
     "deleteList": "Liste löschen",
     "title": "Titel",
@@ -33,5 +34,8 @@
     "barcodeScannerRunning": "ERROR: Barcode-Scanner läuft bereits",
     "networkError": "ERROR: Produkt kann aufgrund von Netzwerkproblemen nicht gesucht werden",
     "feedbackTitle": "Dein Feedback ist wichtig!",
-    "feedbackMessage": "Tippe auf einen Stern, um Posti-Liste zu bewerten. Wir würden uns freuen."
+    "feedbackMessage": "Tippe auf einen Stern, um Posti-Liste zu bewerten. Wir würden uns freuen.",
+    "welcomeTitle": "Vielen Dank fürs Herunterladen!",
+    "welcomeMessage": "Ich freue mich, dass du dich dazu entschieden hast, meine App auszuprobieren. Ich hoffe, du findest sie hilfreich und angenehm. Kontaktiere mich bitte, falls du Fragen oder Feedback hast.",
+    "welcomeSignature": "Ersteller Posti-Liste"
 }

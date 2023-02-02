@@ -22,6 +22,7 @@
       },
     "changeList": "Modifier la liste",
     "add": "Ajouter",
+    "close": "Fermer",
     "confirm": "Confirmer",
     "deleteList": "Supprimer la liste",
     "title": "Titre",
@@ -33,5 +34,8 @@
     "barcodeScannerRunning": "ERROR: Le scanner de codes barres est déjà en cours d'exécution",
     "networkError": "ERROR: Le produit n'a pas pu être recherché en raison de problèmes de réseau",
     "feedbackTitle": "Vos commentaires sont importants!",
-    "feedbackMessage": "Tapez sur une étoile pour évaluer Posti-Liste, nous vous en serions reconnaissants."
+    "feedbackMessage": "Tapez sur une étoile pour évaluer Posti-Liste, nous vous en serions reconnaissants.",
+    "welcomeTitle": "Merci d'avoir téléchargé!",
+    "welcomeMessage": "Je suis heureux que tu aies décidé d'essayer mon application. J'espère que tu la trouveras utile et agréable. N'hésite pas à me contacter si tu as des remarques ou des questions.",
+    "welcomeSignature": "Créateur de Posti-Liste"
 }

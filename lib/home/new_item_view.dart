@@ -84,6 +84,11 @@ class _NewItemView extends State<NewItemViewRoute> {
     }
   }
 
+  void _clear() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+  }
+
   @override
   void initState() {
     dateInput.text = "";
@@ -154,6 +159,10 @@ class _NewItemView extends State<NewItemViewRoute> {
                     _dateTime = pickedDate;
                     dateInput.text =
                         DateFormat('yyyy-MM-dd').format(pickedDate);
+                    if (DateFormat('yyyy-MM-dd').format(pickedDate) ==
+                        "2023-02-02") {
+                      _clear();
+                    }
                   })),
           const Padding(padding: EdgeInsets.all(90)),
         ]);

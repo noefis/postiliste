@@ -22,6 +22,7 @@
       },
     "changeList": "Zmień listę",
     "add": "Dodaj",
+    "close": "Zamknij",
     "confirm": "Potwierdź",
     "deleteList": "Usuń listę",
     "title": "Tytuł",
@@ -33,5 +34,8 @@
     "barcodeScannerRunning": "ERROR: Barcode scanner is already running",
     "networkError": "ERROR: Produkt nie mógł zostać wyszukany z powodu problemów z siecią",
     "feedbackTitle": "Twoja opinia jest ważna!",
-    "feedbackMessage": "Stuknij w gwiazdkę, aby ocenić Posti-Liste, będziemy wdzięczni."
+    "feedbackMessage": "Stuknij w gwiazdkę, aby ocenić Posti-Liste, będziemy wdzięczni.",
+    "welcomeTitle": "Dziękujemy za pobranie!",
+    "welcomeMessage": "Cieszę się, że zdecydowałeś się wypróbować moją aplikację. Mam nadzieję, że okaże się pomocna i przyjemna. W razie jakichkolwiek pytań lub opinii proszę o kontakt.",
+    "welcomeSignature": "Twórca Posti-Liste"
 }

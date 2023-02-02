@@ -58,8 +58,6 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
         val.replaceAll(" ", "").isNotEmpty &&
         val != _title;
 
-    debugPrint("Can edit? $canEdit");
-
     if (canEdit) {
       final prefs = await SharedPreferences.getInstance();
       List<String> activeList = prefs.getStringList(widget.prefKey) ?? [];
@@ -114,7 +112,6 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
   }
 
   void _delete() async {
-    debugPrint("remove!");
     if (mounted) {
       final prefs = await SharedPreferences.getInstance();
       List<String> activeList = prefs.getStringList(widget.prefKey) ?? [];
@@ -265,7 +262,7 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
                                       ),
                                     ))))
                         : Container(),
-                    Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
+                    const Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
                     !widget.active
                         ? ExpandTapWidget(
                             tapPadding: const EdgeInsets.only(
