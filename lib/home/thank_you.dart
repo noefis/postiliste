@@ -14,6 +14,7 @@ Future<void> thankYou(context) async {
         return AlertDialog(
           backgroundColor: Theme.of(context).indicatorColor,
           contentPadding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 25),
           title: Container(
               padding: const EdgeInsets.symmetric(vertical: 40),
               margin: const EdgeInsets.all(0),
@@ -31,7 +32,7 @@ Future<void> thankYou(context) async {
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headline5?.copyWith(
                       color: Colors.white,
-                      fontSize: 40,
+                      fontSize: 36,
                       fontWeight: FontWeight.w700))),
           titlePadding: const EdgeInsets.only(top: 0),
           actionsPadding: const EdgeInsets.only(right: 9, bottom: 9),
