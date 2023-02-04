@@ -28,10 +28,6 @@ class DateItem extends StatefulWidget {
 }
 
 class _DateItem<T> extends State<DateItem> {
-  refresh() {
-    widget.notifyParent();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -45,10 +41,10 @@ class _DateItem<T> extends State<DateItem> {
                 title: widget.radios[key]!,
                 first: widget.first && widget.radios.keys.elementAt(0) == key,
                 prefKey: key,
-                notifyParent: refresh,
+                notifyParent: widget.notifyParent,
               ),
             MyRadioListTileInput(
-              notifyParent: refresh,
+              notifyParent: widget.notifyParent,
               dateTime: widget.dateTime,
               isFocused: widget.isEmpty &&
                   widget.title.data == AppLocalizations.of(context)!.today,

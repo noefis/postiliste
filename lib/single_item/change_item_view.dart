@@ -155,7 +155,7 @@ class _ChangeItemView extends State<ChangeItemViewRoute> {
             child: AutoComplete(
               removeFromAutoCompleteList: _removeFromAutoCompleteList,
               options: _kOptions,
-              onSubmit: (value) => _input = value,
+              onSubmit: (value, textEditingController) => _input = value,
               onChange: (value) => _input = value,
               inputDecoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(12),

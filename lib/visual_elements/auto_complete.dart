@@ -33,8 +33,9 @@ class AutoComplete extends StatelessWidget {
                 scrollPadding: const EdgeInsets.only(bottom: 320),
                 focusNode: focusNode,
                 decoration: inputDecoration,
-                onSubmitted: ((String value) => onSubmit?.call(value)),
-                onChanged: ((value) => onChange?.call(value)),
+                onSubmitted: ((String value) =>
+                    onSubmit?.call(value, textEditingController)),
+                onChanged: ((String value) => onChange?.call(value)),
               );
             },
             optionsViewBuilder: (context, onSelected, options) => Align(

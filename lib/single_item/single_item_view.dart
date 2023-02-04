@@ -11,11 +11,11 @@ import 'my_barcode_scanner.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 
 class SingleItemViewRoute extends StatefulWidget {
-  String title;
-  String prefKey;
+  final String title;
+  final String prefKey;
   final Function() notifyParent;
 
-  SingleItemViewRoute(
+  const SingleItemViewRoute(
       {super.key,
       required this.title,
       required this.prefKey,
@@ -28,13 +28,16 @@ class SingleItemViewRoute extends StatefulWidget {
 class _SingleItemView extends State<SingleItemViewRoute> {
   List<String> _list = [];
   Map<String, List<String>> _images = {};
+  String? _title;
+  String? _prefKey;
+  String _prefKeyUnchanged = "";
 
   bool _allDone = false;
 
   void _getList() async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> activeList = prefs.getStringList(widget.prefKey) ?? [''];
-    String jsonStr = prefs.getString("${widget.prefKey}_images") ?? "{}";
+    List<String> activeList = prefs.getStringList(_prefKey!) ?? [''];
+    String jsonStr = prefs.getString("${_prefKey!}_images") ?? "{}";
 
     Map<String, List<String>> images = _castToStringMap(jsonDecode(jsonStr));
 
@@ -60,13 +63,13 @@ class _SingleItemView extends State<SingleItemViewRoute> {
     setState(() {});
   }
 
-  updateInfo(String value, DateTime dateTime) {
+  _updateInfo(String value, DateTime dateTime) {
     String key = '$value,$dateTime';
-    setState(() {
-      widget.prefKey = key;
-      widget.title = value;
-    });
     widget.notifyParent();
+    setState(() {
+      _prefKey = key;
+      _title = value;
+    });
   }
 
   _setAllDone() {
@@ -79,10 +82,10 @@ class _SingleItemView extends State<SingleItemViewRoute> {
     await initRateMyApp();
     final prefs = await SharedPreferences.getInstance();
     List<String> activeLists = prefs.getStringList("active") ?? [];
-    if (activeLists.remove(widget.prefKey)) {
+    if (activeLists.remove(_prefKey!)) {
       prefs.setStringList("active", activeLists);
-      prefs.remove(widget.prefKey);
-      prefs.remove("${widget.prefKey}_images");
+      prefs.remove(_prefKey!);
+      prefs.remove("${_prefKey!}_images");
       widget.notifyParent();
       Navigator.pop(context);
     } else {
@@ -95,9 +98,9 @@ class _SingleItemView extends State<SingleItemViewRoute> {
       context,
       PageRouteBuilder(
         pageBuilder: (_, __, ___) => ChangeItemViewRoute(
-            notifyParent: updateInfo,
-            input: widget.title,
-            dateTime: DateTime.parse(widget.prefKey.split(',').last)),
+            notifyParent: _updateInfo,
+            input: _title!,
+            dateTime: DateTime.parse(_prefKey!.split(',').last)),
         transitionDuration: const Duration(milliseconds: 210),
         reverseTransitionDuration: const Duration(milliseconds: 200),
         transitionsBuilder: (context, animation, _, child) {
@@ -166,20 +169,20 @@ class _SingleItemView extends State<SingleItemViewRoute> {
   _putImage(List<String> productImages, String key) async {
     if (productImages.isNotEmpty) {
       final prefs = await SharedPreferences.getInstance();
-      String jsonStr = prefs.getString("${widget.prefKey}_images") ?? "{}";
+      String jsonStr = prefs.getString("${_prefKey!}_images") ?? "{}";
 
       Map<String, List<String>> images = _castToStringMap(jsonDecode(jsonStr));
       images[key] = productImages;
 
       String newJsonString = jsonEncode(images);
-      prefs.setString("${widget.prefKey}_images", newJsonString);
+      prefs.setString("${_prefKey!}_images", newJsonString);
     }
   }
 
   void _putActive(prefs, value, key) {
-    List<String> activeLists = prefs.getStringList(widget.prefKey) ?? [];
+    List<String> activeLists = prefs.getStringList(_prefKey!) ?? [];
     activeLists.add(key);
-    prefs.setStringList(widget.prefKey, activeLists);
+    prefs.setStringList(_prefKey!, activeLists);
   }
 
   void _putAutoCompleteList(prefs, value) {
@@ -248,6 +251,11 @@ class _SingleItemView extends State<SingleItemViewRoute> {
 
   @override
   Widget build(BuildContext context) {
+    if (_prefKeyUnchanged != widget.prefKey) {
+      _prefKey = widget.prefKey;
+      _title = widget.title;
+      _prefKeyUnchanged = widget.prefKey;
+    }
     _setAllDone();
     _getList();
     return Scaffold(
@@ -265,6 +273,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: "btn2",
         backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: _scanBarcode,
         child: const Icon(
@@ -281,7 +290,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
         padding: const EdgeInsets.only(top: 75, left: 20, right: 15),
         children: [
           Hero(
-              tag: widget.prefKey,
+              tag: _prefKey!,
               child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   margin: const EdgeInsets.symmetric(vertical: 10),
@@ -289,7 +298,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
                       border: Border(
                           bottom:
                               BorderSide(color: Theme.of(context).hoverColor))),
-                  child: Text(widget.title,
+                  child: Text(_title!,
                       style: Theme.of(context)
                           .textTheme
                           .headline6
@@ -297,13 +306,13 @@ class _SingleItemView extends State<SingleItemViewRoute> {
           ..._list.where((title) => !title.contains("_deactivated")).map(
                 (title) => SingleItemRadio(
                   title: title,
-                  prefKey: widget.prefKey,
+                  prefKey: _prefKey!,
                   picturesLink: _images[title]?.whereType<String>().toList(),
                   active: title.contains("_deactivated"),
                   notifyParent: refresh,
                 ),
               ),
-          SingleItemRadioInput(prefKey: widget.prefKey, notifyParent: refresh),
+          SingleItemRadioInput(prefKey: _prefKey!, notifyParent: refresh),
           Container(
               padding: const EdgeInsets.symmetric(vertical: 10),
               margin: const EdgeInsets.symmetric(vertical: 10),
@@ -317,7 +326,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
               .where((title) => title.contains("_deactivated"))
               .map((title) => SingleItemRadio(
                     title: title,
-                    prefKey: widget.prefKey,
+                    prefKey: _prefKey!,
                     picturesLink: _images[title.replaceAll("_deactivated", "")],
                     active: title.contains("_deactivated"),
                     notifyParent: refresh,
@@ -327,7 +336,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
               ? OutlinedButton(
                   onPressed: () => _remove(),
                   child: Text(
-                      "${AppLocalizations.of(context)!.deleteList}: ${widget.title}"))
+                      "${AppLocalizations.of(context)!.deleteList}: ${_title!}"))
               : Container(),
           const Padding(padding: EdgeInsets.all(78)),
         ]);

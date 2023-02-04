@@ -154,14 +154,16 @@ class _MyHomePageState extends State<MyHomePage> {
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-      floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0.0
-          ? FloatingActionButton(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              onPressed: () => _newItemPush(),
-              tooltip: 'Add',
-              child: const Icon(Icons.add),
-            )
-          : null,
+      floatingActionButton:
+          (MediaQuery.of(context).viewInsets.bottom == 0.0 && mounted)
+              ? FloatingActionButton(
+                  heroTag: null,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  onPressed: () => _newItemPush(),
+                  tooltip: 'Add',
+                  child: const Icon(Icons.add),
+                )
+              : null,
       body: ListView(
         padding: const EdgeInsets.only(top: 48, left: 15, right: 15),
         children: [
