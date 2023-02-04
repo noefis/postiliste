@@ -7,9 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MyRadioListTileInput extends StatefulWidget {
   final Function() notifyParent;
   final DateTime dateTime;
-  bool isFocused;
+  final bool isFocused;
 
-  MyRadioListTileInput(
+  const MyRadioListTileInput(
       {super.key,
       required this.notifyParent,
       this.isFocused = false,
@@ -23,6 +23,9 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
   late TextEditingController textEditingController;
   bool _visible = true;
   bool _wasFocused = false;
+  bool _isFocused = false;
+  bool? _focused;
+  bool? _isSet;
 
   List<String> _kOptions = <String>[];
 
@@ -94,27 +97,29 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isSet == null || _focused != widget.isFocused) {
+      _focused = widget.isFocused;
+      _isSet = true;
+      _isFocused = widget.isFocused;
+    }
     _getAutoComplete();
     return InkWell(
       child: AnimatedOpacity(
           duration: const Duration(milliseconds: 250),
           opacity: _visible ? 1.0 : 0.0,
           onEnd: () => {
-                setState(() => {
-                      _visible ? null : widget.isFocused = false,
-                      _visible = true
-                    })
+                setState(() =>
+                    {_visible ? null : _isFocused = false, _visible = true})
               },
           child: Container(
-            padding:
-                EdgeInsets.symmetric(horizontal: widget.isFocused ? 12 : 3),
+            padding: EdgeInsets.symmetric(horizontal: _isFocused ? 12 : 3),
             margin: const EdgeInsets.symmetric(vertical: 3),
             decoration: BoxDecoration(
                 border: Border.all(
-                    color: widget.isFocused
+                    color: _isFocused
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).primaryColor,
-                    width: widget.isFocused ? 1 : 0),
+                    width: _isFocused ? 1 : 0),
                 borderRadius: const BorderRadius.all(Radius.circular(15))),
             child: Row(
               children: [
@@ -128,24 +133,24 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
                                 textEditingController =
                                     fieldTextEditingController;
                                 return TextField(
-                                  readOnly: widget.isFocused,
+                                  readOnly: _isFocused,
                                   scrollPadding:
                                       const EdgeInsets.only(bottom: 320),
                                   controller: textEditingController,
                                   focusNode: focusNode,
                                   decoration: InputDecoration(
-                                      prefixIcon: widget.isFocused
+                                      prefixIcon: _isFocused
                                           ? null
                                           : const InputRadio(),
                                       prefixIconConstraints:
                                           const BoxConstraints(),
                                       hintStyle: TextStyle(
-                                          color: widget.isFocused
+                                          color: _isFocused
                                               ? Theme.of(context)
                                                   .colorScheme
                                                   .primary
                                               : Theme.of(context).shadowColor),
-                                      hintText: widget.isFocused
+                                      hintText: _isFocused
                                           ? AppLocalizations.of(context)!
                                               .createNewList
                                           : _wasFocused
@@ -157,15 +162,12 @@ class _MyRadioListTileInput<T> extends State<MyRadioListTileInput> {
                                       _newList(value, textEditingController)),
                                   onTap: () => {
                                     setState(() {
-                                      _wasFocused =
-                                          _visible && widget.isFocused;
-                                      widget.isFocused
-                                          ? _visible = false
-                                          : null;
+                                      _wasFocused = _visible && _isFocused;
+                                      _isFocused ? _visible = false : null;
                                     })
                                   },
                                   onChanged: (value) => {
-                                    if (widget.isFocused)
+                                    if (_isFocused)
                                       {
                                         setState(() {
                                           _visible = false;

@@ -4,9 +4,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:postiliste/home/preference_helper.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:postiliste/home/thank_you_confetti.dart';
-import 'package:postiliste/home/thank_you.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'date_helper.dart';
 import 'date_item.dart';
@@ -24,7 +21,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool _thanks = false;
   Map _lists = <DateTime, Map<String, String>>{};
   bool _isEmpty = false;
   DateTime _lastDay = DateTime(
@@ -42,17 +38,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
     SplayTreeMap<DateTime, Map<String, String>> tmpLists = await getLists();
 
-    debugPrint(tmpLists.toString());
-
-    //always show a day after the latest key
-    if (tmpLists.keys.isNotEmpty &&
-        tmpLists.keys.last.millisecondsSinceEpoch >=
-            tomorrow.millisecondsSinceEpoch) {
-      _lastDay = tmpLists.keys.last;
-      _lastDay = DateTime(_lastDay.year, _lastDay.month, _lastDay.day + 1);
-    }
-
     if (_lists.toString() != tmpLists.toString()) {
+      //always show a day after the latest key
+      if (tmpLists.keys.isNotEmpty &&
+          tmpLists.keys.last.millisecondsSinceEpoch >=
+              tomorrow.millisecondsSinceEpoch) {
+        _lastDay = tmpLists.keys.last;
+        _lastDay = DateTime(_lastDay.year, _lastDay.month, _lastDay.day + 1);
+      }
+
       setState(() {
         _lists = tmpLists;
       });
@@ -150,34 +144,13 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void loadThankYou() async {
-    final prefs = await SharedPreferences.getInstance();
-    bool? shownThanks = prefs.getBool("merci");
-    if (shownThanks != true) {
-      prefs.setBool("merci", true);
-      setState(() {
-        _thanks = true;
-      });
-    } else {
-      _thanks = false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    loadThankYou();
     _getLists();
-    Future.delayed(const Duration(seconds: 0), () {
-      _showDialog();
-    });
-    (widget.link == null && _thanks)
-        ? Future.delayed(const Duration(seconds: 0), () {
-            thankYou(context);
-          })
-        : Container();
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
@@ -192,9 +165,6 @@ class _MyHomePageState extends State<MyHomePage> {
       body: ListView(
         padding: const EdgeInsets.only(top: 48, left: 15, right: 15),
         children: [
-          (widget.link == null && _thanks)
-              ? const ThankYouConfetti()
-              : Container(),
           ..._lists.keys.map((key) => DateItem(
                 dateTime: key,
                 first: _lists.keys.elementAt(0) == key,

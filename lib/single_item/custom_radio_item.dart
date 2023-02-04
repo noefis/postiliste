@@ -174,7 +174,7 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
         : widget.title!.replaceAll('_deactivated', '');
     List<String> tmp = _key.split(',');
     _last = tmp.removeLast();
-    if (isBarcode(tmp.last)) {
+    if (tmp.isNotEmpty && isBarcode(tmp.last)) {
       tmp.removeLast();
     }
     _title = tmp.join(",");

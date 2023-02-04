@@ -8,6 +8,8 @@ import 'package:intl/intl_standalone.dart';
 import 'package:postiliste/dark_theme_styles.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:postiliste/thankyou/single_item_thank_you_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:async';
 import 'package:uni_links/uni_links.dart';
@@ -31,6 +33,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   DarkThemeProvider themeChangeProvider = DarkThemeProvider();
+  Widget shownWidget = Container();
+  bool firstLoad = true;
 
   bool _initialUniLinksHandled = false;
   String? _link;
@@ -44,6 +48,7 @@ class _MyAppState extends State<MyApp> {
     //handle deep links
     _initUniLinks();
     _incomingLinkHandler();
+    _loadFirstTime();
 
     getCurrentAppTheme();
   }
@@ -138,31 +143,51 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
+  void _loadFirstTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool firstTime = prefs.getBool("firstTime") ?? true;
+    debugPrint((shownWidget.runtimeType == Container).toString());
+
+    if (shownWidget.runtimeType == Container) {
+      if (firstTime) {
+        //TODO add translations
+        String title = "My first shopping list";
+        String key = '$title,${DateTime.now()}';
+        setState(() {
+          shownWidget = SingleItemThankYouViewRoute(title: title, prefKey: key);
+        });
+      } else {
+        setState(() {
+          shownWidget = MyHomePage(
+              title: 'Posti-Liste', link: _link, notifyParent: _removeLink);
+        });
+      }
+    }
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Posti-Liste',
-      theme: Styles.themeDataLight(context),
-      darkTheme: Styles.themeDataDark(context),
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en', ''), // English, no country code
-        Locale('de', ''), // German, no country code
-        Locale('fr', ''), // French, no country code
-        Locale('es', ''), // Spanish, no country code
-        Locale('it', ''), // Italian, no country code
-        Locale('pt', ''), // Portuguese, no country code
-        Locale('pl', ''), // Polish, no country code
-        Locale('rm', ''), // Romansh (Switzerland), no country code
-      ],
-      home: MyHomePage(
-          title: 'Posti-Liste', link: _link, notifyParent: _removeLink),
-    );
+        title: 'Posti-Liste',
+        theme: Styles.themeDataLight(context),
+        darkTheme: Styles.themeDataDark(context),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en', ''), // English, no country code
+          Locale('de', ''), // German, no country code
+          Locale('fr', ''), // French, no country code
+          Locale('es', ''), // Spanish, no country code
+          Locale('it', ''), // Italian, no country code
+          Locale('pt', ''), // Portuguese, no country code
+          Locale('pl', ''), // Polish, no country code
+          Locale('rm', ''), // Romansh (Switzerland), no country code
+        ],
+        home: shownWidget);
   }
 }
