@@ -146,15 +146,10 @@ class _MyAppState extends State<MyApp> {
   void _loadFirstTime() async {
     final prefs = await SharedPreferences.getInstance();
     bool firstTime = prefs.getBool("firstTime") ?? true;
-    debugPrint((shownWidget.runtimeType == Container).toString());
-
     if (shownWidget.runtimeType == Container) {
       if (firstTime) {
-        //TODO add translations
-        String title = "My first shopping list";
-        String key = '$title,${DateTime.now()}';
         setState(() {
-          shownWidget = SingleItemThankYouViewRoute(title: title, prefKey: key);
+          shownWidget = SingleItemThankYouViewRoute();
         });
       } else {
         setState(() {

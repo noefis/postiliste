@@ -14,11 +14,7 @@ import '../single_item/my_barcode_scanner.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 
 class SingleItemThankYouViewRoute extends StatefulWidget {
-  String title;
-  String prefKey;
-
-  SingleItemThankYouViewRoute(
-      {super.key, required this.title, required this.prefKey});
+  SingleItemThankYouViewRoute({super.key});
 
   @override
   State<SingleItemThankYouViewRoute> createState() => _SingleItemThankYouView();
@@ -27,19 +23,29 @@ class SingleItemThankYouViewRoute extends StatefulWidget {
 class _SingleItemThankYouView extends State<SingleItemThankYouViewRoute> {
   List<String> _list = [];
   Map<String, List<String>> _images = {};
+  String? _title;
+  String? _prefKey;
 
   bool _allDone = false;
 
-  void _setPrefs() async {
+  void _loadFirstTime() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setStringList("active", [widget.prefKey]);
-    prefs.setBool("firstTime", false);
+    if (_prefKey == null) {
+      String title = AppLocalizations.of(context)!.myFirstShoppingList;
+      String key = '$title,${DateTime.now()}';
+      prefs.setStringList("active", [key]);
+      prefs.setBool("firstTime", false);
+      setState(() {
+        _title = title;
+        _prefKey = key;
+      });
+    }
   }
 
   void _getList() async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> activeList = prefs.getStringList(widget.prefKey) ?? [''];
-    String jsonStr = prefs.getString("${widget.prefKey}_images") ?? "{}";
+    List<String> activeList = prefs.getStringList(_prefKey!) ?? [''];
+    String jsonStr = prefs.getString("${_prefKey}_images") ?? "{}";
 
     Map<String, List<String>> images = _castToStringMap(jsonDecode(jsonStr));
 
@@ -68,8 +74,8 @@ class _SingleItemThankYouView extends State<SingleItemThankYouViewRoute> {
   updateInfo(String value, DateTime dateTime) {
     String key = '$value,$dateTime';
     setState(() {
-      widget.prefKey = key;
-      widget.title = value;
+      _prefKey = key;
+      _title = value;
     });
   }
 
@@ -83,10 +89,10 @@ class _SingleItemThankYouView extends State<SingleItemThankYouViewRoute> {
     await initRateMyApp();
     final prefs = await SharedPreferences.getInstance();
     List<String> activeLists = prefs.getStringList("active") ?? [];
-    if (activeLists.remove(widget.prefKey)) {
+    if (activeLists.remove(_prefKey)) {
       prefs.setStringList("active", activeLists);
-      prefs.remove(widget.prefKey);
-      prefs.remove("${widget.prefKey}_images");
+      prefs.remove(_prefKey!);
+      prefs.remove("${_prefKey}_images");
       _pushToHomePage();
     } else {
       debugPrint("ERROR: Unable to remove existing list");
@@ -126,8 +132,8 @@ class _SingleItemThankYouView extends State<SingleItemThankYouViewRoute> {
       PageRouteBuilder(
         pageBuilder: (_, __, ___) => ChangeItemViewRoute(
             notifyParent: updateInfo,
-            input: widget.title,
-            dateTime: DateTime.parse(widget.prefKey.split(',').last)),
+            input: _title!,
+            dateTime: DateTime.parse(_prefKey!.split(',').last)),
         transitionDuration: const Duration(milliseconds: 210),
         reverseTransitionDuration: const Duration(milliseconds: 200),
         transitionsBuilder: (context, animation, _, child) {
@@ -196,20 +202,20 @@ class _SingleItemThankYouView extends State<SingleItemThankYouViewRoute> {
   _putImage(List<String> productImages, String key) async {
     if (productImages.isNotEmpty) {
       final prefs = await SharedPreferences.getInstance();
-      String jsonStr = prefs.getString("${widget.prefKey}_images") ?? "{}";
+      String jsonStr = prefs.getString("${_prefKey}_images") ?? "{}";
 
       Map<String, List<String>> images = _castToStringMap(jsonDecode(jsonStr));
       images[key] = productImages;
 
       String newJsonString = jsonEncode(images);
-      prefs.setString("${widget.prefKey}_images", newJsonString);
+      prefs.setString("${_prefKey}_images", newJsonString);
     }
   }
 
   void _putActive(prefs, value, key) {
-    List<String> activeLists = prefs.getStringList(widget.prefKey) ?? [];
+    List<String> activeLists = prefs.getStringList(_prefKey) ?? [];
     activeLists.add(key);
-    prefs.setStringList(widget.prefKey, activeLists);
+    prefs.setStringList(_prefKey, activeLists);
   }
 
   void _putAutoCompleteList(prefs, value) {
@@ -235,12 +241,6 @@ class _SingleItemThankYouView extends State<SingleItemThankYouViewRoute> {
     appStoreIdentifier: 'ch.noel.postiliste',
     googlePlayIdentifier: 'ch.noel.postiliste',
   );
-
-  @override
-  void initState() {
-    super.initState();
-    _setPrefs();
-  }
 
   initRateMyApp() {
     _rateMyApp.init().then((_) {
@@ -279,6 +279,10 @@ class _SingleItemThankYouView extends State<SingleItemThankYouViewRoute> {
 
   @override
   Widget build(BuildContext context) {
+    if (_prefKey == null) {
+      _loadFirstTime();
+      return Container();
+    }
     _setAllDone();
     _getList();
     Future.delayed(const Duration(seconds: 0), () {
@@ -323,7 +327,7 @@ class _SingleItemThankYouView extends State<SingleItemThankYouViewRoute> {
               decoration: BoxDecoration(
                   border: Border(
                       bottom: BorderSide(color: Theme.of(context).hoverColor))),
-              child: Text(widget.title,
+              child: Text(_title!,
                   style: Theme.of(context)
                       .textTheme
                       .headline6
@@ -332,13 +336,13 @@ class _SingleItemThankYouView extends State<SingleItemThankYouViewRoute> {
           ..._list.where((title) => !title.contains("_deactivated")).map(
                 (title) => SingleItemRadio(
                   title: title,
-                  prefKey: widget.prefKey,
+                  prefKey: _prefKey!,
                   picturesLink: _images[title]?.whereType<String>().toList(),
                   active: title.contains("_deactivated"),
                   notifyParent: refresh,
                 ),
               ),
-          SingleItemRadioInput(prefKey: widget.prefKey, notifyParent: refresh),
+          SingleItemRadioInput(prefKey: _prefKey!, notifyParent: refresh),
           Container(
               padding: const EdgeInsets.symmetric(vertical: 10),
               margin: const EdgeInsets.symmetric(vertical: 10),
@@ -352,7 +356,7 @@ class _SingleItemThankYouView extends State<SingleItemThankYouViewRoute> {
               .where((title) => title.contains("_deactivated"))
               .map((title) => SingleItemRadio(
                     title: title,
-                    prefKey: widget.prefKey,
+                    prefKey: _prefKey!,
                     picturesLink: _images[title.replaceAll("_deactivated", "")],
                     active: title.contains("_deactivated"),
                     notifyParent: refresh,
@@ -362,7 +366,7 @@ class _SingleItemThankYouView extends State<SingleItemThankYouViewRoute> {
               ? OutlinedButton(
                   onPressed: () => _remove(),
                   child: Text(
-                      "${AppLocalizations.of(context)!.deleteList}: ${widget.title}"))
+                      "${AppLocalizations.of(context)!.deleteList}: ${_title}"))
               : Container(),
           const Padding(padding: EdgeInsets.all(78)),
         ]);

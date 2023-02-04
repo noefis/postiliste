@@ -37,5 +37,6 @@
     "feedbackMessage": "Pulse sobre una estrella para valorar Posti-Liste, se lo agradeceríamos.",
     "welcomeTitle": "¡Gracias por descargarlo!",
     "welcomeMessage": "Me alegro de que hayas decidido probar mi aplicación. Espero que le resulte útil y agradable. Póngase en contacto conmigo si tiene alguna pregunta o comentario.",
-    "welcomeSignature": "Creador de Posti-Liste"
+    "welcomeSignature": "Creador de Posti-Liste",
+    "myFirstShoppingList": "Mi primera lista de la compra"
 }
