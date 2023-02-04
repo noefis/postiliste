@@ -19,6 +19,7 @@ Future<SplayTreeMap<DateTime, Map<String, String>>> getLists() async {
 
   List<String>? activeLists = prefs.getStringList("active");
   debugPrint("ALL KEYS: ${prefs.getKeys()}");
+  debugPrint("ACTIVE: ${prefs.getStringList("active").toString()}");
 
   activeLists?.forEach((active) {
     List actives = active.split(',');
