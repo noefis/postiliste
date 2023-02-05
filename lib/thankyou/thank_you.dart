@@ -45,7 +45,7 @@ Future<void> thankYou(context) async {
                         color: Theme.of(context).unselectedWidgetColor,
                         fontSize: 18)),
                 const Padding(padding: EdgeInsets.all(10)),
-                Text("Noel",
+                Text("Noël",
                     textAlign: TextAlign.justify,
                     style: Theme.of(context).textTheme.headline6?.copyWith(
                         color: Theme.of(context).unselectedWidgetColor,
