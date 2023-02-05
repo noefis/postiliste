@@ -14,7 +14,7 @@ import '../single_item/my_barcode_scanner.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 
 class SingleItemThankYouViewRoute extends StatefulWidget {
-  SingleItemThankYouViewRoute({super.key});
+  const SingleItemThankYouViewRoute({super.key});
 
   @override
   State<SingleItemThankYouViewRoute> createState() => _SingleItemThankYouView();
@@ -31,6 +31,7 @@ class _SingleItemThankYouView extends State<SingleItemThankYouViewRoute> {
   void _loadFirstTime() async {
     final prefs = await SharedPreferences.getInstance();
     if (_prefKey == null) {
+      // ignore: use_build_context_synchronously
       String title = AppLocalizations.of(context)!.myFirstShoppingList;
       String key = '$title,${DateTime.now()}';
       prefs.setStringList("active", [key]);
@@ -155,7 +156,7 @@ class _SingleItemThankYouView extends State<SingleItemThankYouViewRoute> {
 
   void _scanBarcode() async {
     String? barcode = await scanBarcode(context);
-    String? error = null;
+    String? error;
 
     if (barcode != null && !barcode.contains("ERROR")) {
       barcode = _checkBarcodeValidity(barcode);
@@ -164,6 +165,7 @@ class _SingleItemThankYouView extends State<SingleItemThankYouViewRoute> {
     } else if (barcode.contains("ERROR")) {
       error = barcode;
     } else {
+      // ignore: use_build_context_synchronously
       final List<String> item = await getFoodRepoItem(barcode, context);
       final String productName = item.removeAt(0);
       final List<String> images = item;
@@ -260,6 +262,7 @@ class _SingleItemThankYouView extends State<SingleItemThankYouViewRoute> {
                 onPressed: () async {
                   await _rateMyApp
                       .callEvent(RateMyAppEventType.rateButtonPressed);
+                  // ignore: use_build_context_synchronously
                   Navigator.pop<RateMyAppDialogButton>(
                       context, RateMyAppDialogButton.rate);
                 },
@@ -366,7 +369,7 @@ class _SingleItemThankYouView extends State<SingleItemThankYouViewRoute> {
               ? OutlinedButton(
                   onPressed: () => _remove(),
                   child: Text(
-                      "${AppLocalizations.of(context)!.deleteList}: ${_title}"))
+                      "${AppLocalizations.of(context)!.deleteList}: $_title"))
               : Container(),
           const Padding(padding: EdgeInsets.all(78)),
         ]);

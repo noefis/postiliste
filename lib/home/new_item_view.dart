@@ -51,6 +51,7 @@ class _NewItemView extends State<NewItemViewRoute> {
       _putAutoCompleteList(prefs, _input);
 
       await widget.notifyParent();
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
     }
   }

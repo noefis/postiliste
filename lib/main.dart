@@ -28,7 +28,7 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -38,7 +38,6 @@ class _MyAppState extends State<MyApp> {
 
   bool _initialUniLinksHandled = false;
   String? _link;
-  Object? _err;
   bool _firstTime = true;
 
   StreamSubscription? _streamSubscription;
@@ -104,6 +103,7 @@ class _MyAppState extends State<MyApp> {
     if (pattern.hasMatch(data)) {
       return _decode(data);
     }
+    return null;
   }
 
   void _incomingLinkHandler() {
@@ -121,7 +121,6 @@ class _MyAppState extends State<MyApp> {
           _firstTime = false;
 
           _link = data;
-          _err = null;
         });
       }, onError: (Object err) {
         if (!mounted) {
@@ -153,7 +152,7 @@ class _MyAppState extends State<MyApp> {
     if (shownWidget.runtimeType == Container) {
       if (firstTime) {
         setState(() {
-          shownWidget = SingleItemThankYouViewRoute();
+          shownWidget = const SingleItemThankYouViewRoute();
         });
       } else {
         setState(() {

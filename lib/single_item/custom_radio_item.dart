@@ -69,6 +69,7 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
         _putAutoCompleteList(prefs, val);
         _changeImageReference(prefs, "$val,$_last");
         _edit = false;
+        // ignore: use_build_context_synchronously
         FocusScope.of(context).unfocus();
         widget.notifyParent();
       }
@@ -231,7 +232,7 @@ class _SingleItemRadio<T> extends State<SingleItemRadio> {
                                         contentPadding:
                                             EdgeInsets.symmetric(vertical: 0),
                                         border: InputBorder.none),
-                                    style: TextStyle(fontSize: 14),
+                                    style: const TextStyle(fontSize: 14),
                                     focusNode: _focusNode,
                                     onEditingComplete: () => _changeTitle(
                                         _textFormFieldController.text),

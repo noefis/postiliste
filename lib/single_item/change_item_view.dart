@@ -21,14 +21,14 @@ class ChangeItemViewRoute extends StatefulWidget {
 }
 
 class _ChangeItemView extends State<ChangeItemViewRoute> {
-  var _input = null;
-  var _dateTime = null;
+  late String _input;
+  late DateTime _dateTime;
   TextEditingController dateInput = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    _input ??= widget.input;
-    _dateTime ??= widget.dateTime;
+    _input = widget.input;
+    _dateTime = widget.dateTime;
     _getAutoComplete();
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -61,6 +61,7 @@ class _ChangeItemView extends State<ChangeItemViewRoute> {
       _changeListContent(prefs, _input, _dateTime);
 
       await widget.notifyParent(_input, _dateTime);
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
     }
   }

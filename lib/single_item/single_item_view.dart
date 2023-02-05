@@ -87,6 +87,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
       prefs.remove(_prefKey!);
       prefs.remove("${_prefKey!}_images");
       widget.notifyParent();
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
     } else {
       debugPrint("ERROR: Unable to remove existing list");
@@ -122,7 +123,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
 
   void _scanBarcode() async {
     String? barcode = await scanBarcode(context);
-    String? error = null;
+    String? error;
 
     if (barcode != null && !barcode.contains("ERROR")) {
       barcode = _checkBarcodeValidity(barcode);
@@ -131,6 +132,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
     } else if (barcode.contains("ERROR")) {
       error = barcode;
     } else {
+      // ignore: use_build_context_synchronously
       final List<String> item = await getFoodRepoItem(barcode, context);
       final String productName = item.removeAt(0);
       final List<String> images = item;
@@ -232,6 +234,7 @@ class _SingleItemView extends State<SingleItemViewRoute> {
                 onPressed: () async {
                   await _rateMyApp
                       .callEvent(RateMyAppEventType.rateButtonPressed);
+                  // ignore: use_build_context_synchronously
                   Navigator.pop<RateMyAppDialogButton>(
                       context, RateMyAppDialogButton.rate);
                 },

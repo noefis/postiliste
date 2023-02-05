@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import 'SharedPreferences.dart';
+import 'shared_preferences.dart';
 
 class DarkThemeProvider with ChangeNotifier {
   DarkThemePreference darkThemePreference = DarkThemePreference();
