@@ -172,6 +172,7 @@ class _MyAppState extends State<MyApp> {
     _loadFirstTime();
 
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Posti-Liste',
         theme: Styles.themeDataLight(context),
         darkTheme: Styles.themeDataDark(context),
