@@ -190,7 +190,8 @@ class _MyRadioListTile<T> extends State<MyRadioListTile> {
                                                     .unselectedWidgetColor))),
                             widget.first
                                 ? Icon(Icons.navigate_next,
-                                    color: Theme.of(context).shadowColor)
+                                    color:
+                                        Theme.of(context).colorScheme.primary)
                                 : Container()
                           ]),
                         ))),
