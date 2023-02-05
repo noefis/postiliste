@@ -20,6 +20,12 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+bool _notYetShownLink = true;
+
+resetNotYetShownLink() {
+  _notYetShownLink = true;
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   Map _lists = <DateTime, Map<String, String>>{};
   bool _isEmpty = false;
@@ -96,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _showDialog() async {
-    if (widget.link != null) {
+    if (mounted) {
       List<dynamic> data = jsonDecode(widget.link!);
       final prefKey = adjustDate(data.removeAt(0));
       List tmp = prefKey.split(",");
@@ -146,6 +152,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.link != null && _notYetShownLink) {
+      _notYetShownLink = false;
+      Future.delayed(const Duration(seconds: 0), () {
+        _showDialog();
+      });
+    }
     _getLists();
     return Scaffold(
       extendBodyBehindAppBar: true,

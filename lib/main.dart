@@ -39,6 +39,7 @@ class _MyAppState extends State<MyApp> {
   bool _initialUniLinksHandled = false;
   String? _link;
   Object? _err;
+  bool _firstTime = true;
 
   StreamSubscription? _streamSubscription;
 
@@ -48,7 +49,6 @@ class _MyAppState extends State<MyApp> {
     //handle deep links
     _initUniLinks();
     _incomingLinkHandler();
-    _loadFirstTime();
 
     getCurrentAppTheme();
   }
@@ -115,7 +115,11 @@ class _MyAppState extends State<MyApp> {
         String? data = _getData(link);
         debugPrint("received Link: $data");
 
+        resetNotYetShownLink();
+
         setState(() {
+          _firstTime = false;
+
           _link = data;
           _err = null;
         });
@@ -153,8 +157,7 @@ class _MyAppState extends State<MyApp> {
         });
       } else {
         setState(() {
-          shownWidget = MyHomePage(
-              title: 'Posti-Liste', link: _link, notifyParent: _removeLink);
+          _firstTime = false;
         });
       }
     }
@@ -163,6 +166,12 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    if (!_firstTime) {
+      shownWidget = MyHomePage(
+          title: 'Posti-Liste', link: _link, notifyParent: _removeLink);
+    }
+    _loadFirstTime();
+
     return MaterialApp(
         title: 'Posti-Liste',
         theme: Styles.themeDataLight(context),
